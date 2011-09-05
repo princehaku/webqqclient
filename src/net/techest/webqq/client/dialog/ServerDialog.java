@@ -1,0 +1,156 @@
+/*  Copyright 2010 princehaku
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  Created on : 2011-9-4, 下午6:30:42
+ *  Author     : princehaku
+ */
+
+package net.techest.webqq.client.dialog;
+
+import java.util.TimerTask;
+
+import net.techest.util.Log4j;
+import net.techest.webqq.action.AbstractLoginAction;
+import net.techest.webqq.action.ActionException;
+import net.techest.webqq.bean.QQUser;
+import net.techest.webqq.net.HttpClient;
+import net.techest.webqq.sso.LoginStatu;
+import net.techest.webqq.sso.SSOLoginAction;
+
+/**每一个客户端于服务器交互均会创建一个这个
+ * 
+ * @author princehaku
+ *
+ */
+public class ServerDialog extends Thread{
+	
+	private QQUser loginUser;
+	/**维持用户在线的进程
+	 * 
+	 */
+	private TimerTask keepAlive;
+	/**消息处理进程
+	 * 
+	 */
+	private TimerTask messageHandler;
+	/**登录处理器
+	 * 
+	 * @param user
+	 */
+	AbstractLoginAction loginAction;
+	
+	private OnlineStatu onlineStatu;
+	
+	public ServerDialog(QQUser user){
+		this.loginUser=user;
+		this.loginUser.setServerContext(this);
+	}
+	/**设置登录处理
+	 * 
+	 * @param loginAction
+	 */
+	public void setLoginAction(AbstractLoginAction loginAction){
+		 this.loginAction=loginAction;
+		 this.loginAction.setUser(this.loginUser);
+	}
+	
+	public synchronized void run(){
+		try {
+			//验证
+			this.userAuth();
+			//如果需要验证码 则等待输入
+			if(getLoginAction().getStatu().equals(LoginStatu.NEED_VERIFY)){
+				Log4j.getInstance().debug("需要验证码");
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			Log4j.getInstance().debug("检测登录"+getLoginAction().getStatu());
+			//如果是登录成功的  阻塞掉进程
+			if(getLoginAction().getStatu().equals(LoginStatu.SUCCESS)){
+				//
+				this.setLiveStatu(OnlineStatu.ONLINE);
+				try {
+					//只要不是离线 就一直阻塞这个进程
+					while(!this.onlineStatu.equals(OnlineStatu.OFFLINE)){
+						this.wait();
+					}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}else{
+				Log4j.getInstance().debug("登录错误 "+getLoginAction().getStatu());
+			}
+			
+		} catch (DialogException e) {
+			e.printStackTrace();
+		}
+		
+		//释放掉其他线程 并结束
+		
+	}
+	
+	private void setLiveStatu(OnlineStatu statu) {
+		this.onlineStatu=statu;
+	}
+	/**验证码请求
+	 * 
+	 */
+	public  synchronized void inputVerify(String verifyCode){
+		try {
+			getLoginAction().loginVerify(verifyCode);
+		} catch (Exception e) {
+			this.loginAction.setLoginStatu(LoginStatu.VERIFY_ERROR);
+		}
+		this.notify();
+	}
+	/**登录处理
+	 * 默认使用SSOlogin
+	 * @param loginAction
+	 */
+	public AbstractLoginAction getLoginAction(){
+		 if(this.loginAction==null){
+			 this.loginAction=new SSOLoginAction();
+			 this.loginAction.setUser(this.loginUser);
+		 }
+		 return this.loginAction;
+	}
+	/**验证用户登录
+	 * @throws DialogException 
+	 * 
+	 */
+	public void userAuth() throws DialogException{
+		try {
+			getLoginAction().auth();
+		} catch (ActionException e) {
+			Log4j.getInstance().warn("登录时错误");
+			e.printStackTrace();
+			throw new DialogException("登录时错误"+e.getMessage());
+		}
+	}
+
+    private static class InstanceHolder {
+        final static HttpClient instance = new HttpClient();
+    }
+    /**得到单例的http连接类
+     * 
+     * @return 
+     */
+    public HttpClient getHttpClient() {
+        return InstanceHolder.instance;
+    }
+	
+}
