@@ -18,37 +18,43 @@
 
 package net.techest.webqq.client.dialog;
 
-import java.util.TimerTask;
+import java.util.Observable;
+import java.util.Observer;
 
 import net.techest.util.Log4j;
-import net.techest.webqq.action.AbstractLoginAction;
 import net.techest.webqq.action.ActionException;
+import net.techest.webqq.action.MessagePullThread;
+import net.techest.webqq.action.WebQQLoginAction;
+import net.techest.webqq.api.APIBase;
+import net.techest.webqq.api.WEBQQAPIFacroty;
+import net.techest.webqq.api.WebQQAPIInterface;
 import net.techest.webqq.bean.QQUser;
+import net.techest.webqq.bean.WebQQUser;
 import net.techest.webqq.net.HttpClient;
+import net.techest.webqq.sso.AbstractLoginAction;
 import net.techest.webqq.sso.LoginStatu;
-import net.techest.webqq.sso.SSOLoginAction;
 
 /**每一个客户端于服务器交互均会创建一个这个
- * 
+ * 同时这也是一个观察者
+ * 当有状态消息变更时 更新自身状态消息链
+ * 以供其他部分使用
  * @author princehaku
  *
  */
-public class ServerDialog extends Thread{
+public class ServerDialog extends Thread implements Observer{
 	
 	private QQUser loginUser;
-	/**维持用户在线的进程
+	/**消息获取器
+	 * 获取服务器推送的消息
 	 * 
+	 * 并维持用户在线
 	 */
-	private TimerTask keepAlive;
-	/**消息处理进程
-	 * 
-	 */
-	private TimerTask messageHandler;
+	private MessagePullThread msgpulltask;
 	/**登录处理器
 	 * 
 	 * @param user
 	 */
-	AbstractLoginAction loginAction;
+	private AbstractLoginAction loginAction;
 	
 	private OnlineStatu onlineStatu;
 	
@@ -56,7 +62,7 @@ public class ServerDialog extends Thread{
 		this.loginUser=user;
 		this.loginUser.setServerContext(this);
 	}
-	/**设置登录处理
+	/**设置登录处理器
 	 * 
 	 * @param loginAction
 	 */
@@ -67,8 +73,9 @@ public class ServerDialog extends Thread{
 	
 	public synchronized void run(){
 		try {
-			//验证
-			this.userAuth();
+			//发起验证连接
+			this.userAuth();			
+			int i=0;
 			//如果需要验证码 则等待输入
 			if(getLoginAction().getStatu().equals(LoginStatu.NEED_VERIFY)){
 				Log4j.getInstance().debug("需要验证码");
@@ -78,11 +85,13 @@ public class ServerDialog extends Thread{
 					e.printStackTrace();
 				}
 			}
-			Log4j.getInstance().debug("检测登录"+getLoginAction().getStatu());
+			Log4j.getInstance().debug("检测登录状态"+getLoginAction().getStatu());
 			//如果是登录成功的  阻塞掉进程
 			if(getLoginAction().getStatu().equals(LoginStatu.SUCCESS)){
 				//
 				this.setLiveStatu(OnlineStatu.ONLINE);
+				this.msgpulltask=new MessagePullThread(this.loginUser);
+				this.msgpulltask.start();
 				try {
 					//只要不是离线 就一直阻塞这个进程
 					while(!this.onlineStatu.equals(OnlineStatu.OFFLINE)){
@@ -103,8 +112,9 @@ public class ServerDialog extends Thread{
 		
 	}
 	
-	private void setLiveStatu(OnlineStatu statu) {
+	public synchronized void setLiveStatu(OnlineStatu statu) {
 		this.onlineStatu=statu;
+		this.notify();
 	}
 	/**验证码请求
 	 * 
@@ -118,12 +128,12 @@ public class ServerDialog extends Thread{
 		this.notify();
 	}
 	/**登录处理
-	 * 默认使用SSOlogin
+	 * 默认使用WebQQLoginAction
 	 * @param loginAction
 	 */
 	public AbstractLoginAction getLoginAction(){
 		 if(this.loginAction==null){
-			 this.loginAction=new SSOLoginAction();
+			 this.loginAction=new WebQQLoginAction();
 			 this.loginAction.setUser(this.loginUser);
 		 }
 		 return this.loginAction;
@@ -134,7 +144,7 @@ public class ServerDialog extends Thread{
 	 */
 	public void userAuth() throws DialogException{
 		try {
-			getLoginAction().auth();
+			getLoginAction().doit();
 		} catch (ActionException e) {
 			Log4j.getInstance().warn("登录时错误");
 			e.printStackTrace();
@@ -146,11 +156,30 @@ public class ServerDialog extends Thread{
         final static HttpClient instance = new HttpClient();
     }
     /**得到单例的http连接类
+     * 整个会话会一直使用它
      * 
      * @return 
      */
     public HttpClient getHttpClient() {
         return InstanceHolder.instance;
     }
+    
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		
+	}
+	
+	public APIBase getWebQQAPI(String apiName){
+		APIBase api = null;
+		try {
+			api = WEBQQAPIFacroty.getInstance().getApiByName(apiName);
+			((WebQQAPIInterface)api).init((WebQQUser) this.loginUser);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return api;
+	}
 	
 }

@@ -7,7 +7,6 @@ function encrypt(pass, verify) {
 	B += verify;
 	B = B.toUpperCase();
 	return md5(md5_3(pass) + B);
-
 }
 function md5_3(B) {
 	var A = new Array;

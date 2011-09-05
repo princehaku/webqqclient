@@ -18,6 +18,11 @@
 
 package net.techest.webqq.client.dialog;
 
+/**消息会话类
+ * 
+ * @author princehaku
+ *
+ */
 public class MessageDialog extends Thread {
 
 }

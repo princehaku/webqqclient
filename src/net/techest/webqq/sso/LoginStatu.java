@@ -18,6 +18,11 @@
 
 package net.techest.webqq.sso;
 
+/**用户的登录状态
+ * 
+ * @author princehaku
+ *
+ */
 public enum LoginStatu {
 	/**连接错误
 	 * 

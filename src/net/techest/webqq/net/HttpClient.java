@@ -35,7 +35,7 @@ import net.techest.util.Log4j;
  * 
  * @author princehaku
  */
-public class HttpClient {
+public class HttpClient implements Cloneable{
 
 	public enum REQ_TYPE {
 
@@ -59,6 +59,8 @@ public class HttpClient {
 	QueryParam requestParam = new QueryParam();
 
 	QueryParam postParams = new QueryParam();
+
+	private int responseTimerOut=30000;
 
 	public URL getUrl() {
 		return this.turl;
@@ -139,6 +141,13 @@ public class HttpClient {
 	public void setPostProperty(String key, String value) {
 		postParams.put(key, value);
 	}
+	/**得到所有cookie
+	 * 
+	 * @return
+	 */
+	public Cookies getCookies() {
+		return cookies;
+	}
 
 	/**
 	 * 
@@ -152,8 +161,8 @@ public class HttpClient {
 
 		try {
 			httpConn = (HttpURLConnection) turl.openConnection();
-			httpConn.setConnectTimeout(30000);
-			httpConn.setReadTimeout(30000);
+			httpConn.setConnectTimeout(this.responseTimerOut);
+			httpConn.setReadTimeout(this.responseTimerOut);
 			if (getRequestType().equals(REQ_TYPE.GET.toString())) {
 				httpConn.setRequestMethod("GET");
 			}
@@ -261,4 +270,18 @@ public class HttpClient {
 	public String getResponseMessage() {
 		return this.responseMessage;
 	}
+	public Object clone() {
+		try {
+			// call clone in Object.
+			return super.clone();
+			} catch(CloneNotSupportedException e) {
+			System.out.println("Cloning not allowed.");
+			return this;
+			} 
+	}
+
+	public void setResponseTimeOut(int i) {
+		this.responseTimerOut=i;
+	}
+	
 }

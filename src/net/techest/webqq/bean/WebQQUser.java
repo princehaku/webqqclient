@@ -17,7 +17,31 @@
  */
 
 package net.techest.webqq.bean;
-
+/**登录进webqq的需要有clientid和psessionid
+ * 才能进行其他的qq相关操作
+ * 这两个值会在登录成功后自动注入
+ * @author princehaku
+ *
+ */
 public class WebQQUser extends QQUser{
-
+	
+	String clientid="";
+	
+	String psessionid="";
+	
+	public String getClientid() {
+		return clientid;
+	}
+	
+	public void setClientid(String clientid) {
+		this.clientid = clientid;
+	}
+	
+	public String getPsessionid() {
+		return psessionid;
+	}
+	
+	public void setPsessionid(String psessionid) {
+		this.psessionid = psessionid;
+	}
 }

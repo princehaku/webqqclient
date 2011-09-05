@@ -18,35 +18,67 @@
 
 package net.techest.webqq.action;
 
-import net.techest.webqq.net.HttpClient;
-import net.techest.webqq.sso.LoginStatu;
-import net.techest.webqq.sso.SSOLoginAction;
 
-public class WebQQLoginAction extends SSOLoginAction{
+
+import net.sf.json.JSONObject;
+import net.techest.webqq.api.LoginAPI;
+import net.techest.webqq.response.AbstractResponseHandle;
+import net.techest.webqq.sso.Action;
+import net.techest.webqq.sso.LoginStatu;
+
+/**
+ * WEBQQ登录 继承自SSOLOGIN 
+ * 需要先执行了SSOLOGIN才能使用WEBQQ的登录 
+ * 如果这里登录失败 
+ * 则将状态回写
+ * 
+ * @author princehaku
+ */
+public class WebQQLoginAction extends SSOLoginAction implements Action{
+
+	protected AbstractResponseHandle resp;
 	
-	public void auth() throws ActionException {
-		super.auth();
-		if(this.getStatu().equals(LoginStatu.SUCCESS)){
+	public void setResponseHandle(AbstractResponseHandle resp) {
+		this.resp=resp;
+	}
+	
+	/**执行回调
+	 * 
+	 */
+	public void callBack(){
+		//回调
+		if(resp!=null){
+			this.resp.handle(this);
+		}
+	}
+
+	public void doit() throws ActionException {
+		super.doit();
+		if (this.getStatu().equals(LoginStatu.SUCCESS)) {
 			try {
 				this.loginToQQ();
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new ActionException("登录到QQ失败"+e.getMessage());
+				throw new ActionException("登录到QQ失败" + e.getMessage());
 			}
 		}
+		//执行验证回调
+		this.callBack();
 	}
-	
-	public void loginToQQ() throws Exception{
-		HttpClient hc=this.getUser().getServerContext().getHttpClient();
-		//需要构造
-		hc.setUrl("http://d.web2.qq.com/channel/login2");
-		hc.setRequestProperty("Referer","http://d.web2.qq.com/proxy.html?v=20110331002&callback=2");
-		hc.setPostString("r=%7B%22status%22%3A%22online%22%2C%22ptwebqq%22%3A%2241152f95c3718abf3a15824ac05608cfb237ad66bbfcc7a93e399afe2db78b3a%22%2C%22passwd_sig%22%3A%22%22%2C%22clientid%22%3A%2238359557%22%2C%22psessionid%22%3Anull%7D&clientid=38359557&psessionid=null");
-		byte[] content=hc.exec();
-		System.out.println(new String(content));
-		
-		
-		
+
+	/**
+	 * 
+	 * 需要先执行了SSOLOGIN才能使用WEBQQ的登录 如果这里登录失败 则将状态回写
+	 * 
+	 * @throws Exception
+	 */
+	public void loginToQQ() throws Exception {
+		LoginAPI api= (LoginAPI) loginUser.getServerContext().getWebQQAPI("webqq_login");
+		api.process();
+		JSONObject jsonObject = api.getResponseJson();
+		if(jsonObject.getLong("retcode")!=0){
+			this.setLoginStatu(LoginStatu.CONNECT_ERROR);
+		}
 	}
-	
+
 }

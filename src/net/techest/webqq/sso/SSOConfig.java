@@ -20,7 +20,7 @@ package net.techest.webqq.sso;
 
 import net.techest.util.Configure;
 
-/**腾讯SSO配置
+/**SSO登录配置
  * 
  * @author princehaku
  *
