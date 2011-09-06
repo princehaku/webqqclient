@@ -19,8 +19,8 @@
 package net.techest.webqq.action;
 
 import net.sf.json.JSONObject;
-import net.techest.webqq.api.PullDataAPI;
 import net.techest.webqq.bean.QQUser;
+import net.techest.webqq.bean.api.PullDataAPI;
 import net.techest.webqq.client.dialog.OnlineStatu;
 import net.techest.webqq.sso.Action;
 

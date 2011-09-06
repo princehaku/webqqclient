@@ -41,6 +41,7 @@ public class TestQQ {
 		//设置登录回调
 		((WebQQLoginAction)sd.getLoginAction()).setResponseHandle(new WebQQLoginResponseHandle(sd));
 		sd.start();
+		
 	}
 
 }

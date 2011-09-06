@@ -21,7 +21,7 @@ package net.techest.webqq.action;
 
 
 import net.sf.json.JSONObject;
-import net.techest.webqq.api.LoginAPI;
+import net.techest.webqq.bean.api.LoginAPI;
 import net.techest.webqq.response.AbstractResponseHandle;
 import net.techest.webqq.sso.Action;
 import net.techest.webqq.sso.LoginStatu;

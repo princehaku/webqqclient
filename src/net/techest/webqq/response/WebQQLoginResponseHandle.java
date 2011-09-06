@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import net.techest.util.Log4j;
-import net.techest.webqq.api.APIBase;
+import net.techest.webqq.bean.api.APIBase;
 import net.techest.webqq.client.dialog.ServerDialog;
 import net.techest.webqq.sso.AbstractLoginAction;
 import net.techest.webqq.sso.LoginStatu;
@@ -50,7 +50,7 @@ public class WebQQLoginResponseHandle extends AbstractResponseHandle {
 			}
 		}
 		
-		APIBase api=this.sd.getWebQQAPI("webqq_get_user_friends");
+		APIBase api=this.sd.getWebQQAPI("webqq_get_online_friends");
 		try {
 			api.process();
 			System.out.println(api.getRequestString());

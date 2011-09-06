@@ -22,14 +22,15 @@ import java.util.Observable;
 import java.util.Observer;
 
 import net.techest.util.Log4j;
+import net.techest.webqq.WebQQSystem;
 import net.techest.webqq.action.ActionException;
 import net.techest.webqq.action.MessagePullThread;
 import net.techest.webqq.action.WebQQLoginAction;
-import net.techest.webqq.api.APIBase;
-import net.techest.webqq.api.WEBQQAPIFacroty;
-import net.techest.webqq.api.WebQQAPIInterface;
 import net.techest.webqq.bean.QQUser;
 import net.techest.webqq.bean.WebQQUser;
+import net.techest.webqq.bean.api.APIBase;
+import net.techest.webqq.bean.api.WEBQQAPIFacroty;
+import net.techest.webqq.bean.api.WebQQAPIInterface;
 import net.techest.webqq.net.HttpClient;
 import net.techest.webqq.sso.AbstractLoginAction;
 import net.techest.webqq.sso.LoginStatu;
@@ -171,8 +172,13 @@ public class ServerDialog extends Thread implements Observer{
 	
 	public APIBase getWebQQAPI(String apiName){
 		APIBase api = null;
+		WEBQQAPIFacroty apifac=(WEBQQAPIFacroty) WebQQSystem.getInstance().getContext().getBean("apifactory");
 		try {
-			api = WEBQQAPIFacroty.getInstance().getApiByName(apiName);
+			api = apifac.getApiByName(apiName);
+			if(api==null){
+				Log4j.getInstance().error("不存在API ："+apiName);
+				return api;
+			}
 			((WebQQAPIInterface)api).init((WebQQUser) this.loginUser);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
