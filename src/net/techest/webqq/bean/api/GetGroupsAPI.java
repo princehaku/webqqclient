@@ -12,14 +12,30 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *
- *  Created on : 2011-9-4, 下午6:29:55
+ *  Created on : 2011-9-5, 上午11:49:19
  *  Author     : princehaku
  */
 
-package net.techest.webqq.response;
+package net.techest.webqq.bean.api;
 
+import net.sf.json.JSONObject;
+import net.techest.webqq.net.QueryParam;
+import net.techest.webqq.net.HttpClient.REQ_TYPE;
 
+/**获取群列表
+ * 
+ * @author haku
+ *
+ */
+public class GetGroupsAPI extends CommonAPI{
+	
+	public GetGroupsAPI(){
+		this.setRequestType(REQ_TYPE.POST);
+		this.setRequestURI("http://s.web2.qq.com/api/get_group_name_list_mask2");
+	}
 
-public interface AbstractResponseHandle {
-		public void handle(Object loginAction);
+	@Override
+	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
+		
+	}
 }

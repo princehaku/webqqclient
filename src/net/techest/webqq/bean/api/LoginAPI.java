@@ -19,8 +19,11 @@
 package net.techest.webqq.bean.api;
 
 
+import org.springframework.stereotype.Component;
+
 import net.sf.json.JSONObject;
 import net.techest.webqq.bean.WebQQUser;
+import net.techest.webqq.client.OnlineStatu;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 
 /**登录的api
@@ -31,10 +34,14 @@ import net.techest.webqq.net.HttpClient.REQ_TYPE;
  * @author haku
  *
  */
+
+@Component
 public class LoginAPI extends APIBase implements WebQQAPIInterface{
 
 	private WebQQUser user;
 	
+	private OnlineStatu onlinestatu=OnlineStatu.ONLINE;
+
 	public LoginAPI() {
 		this.setRequestType(REQ_TYPE.POST);
 		this.setRequestURI("http://d.web2.qq.com/channel/login2");
@@ -46,8 +53,8 @@ public class LoginAPI extends APIBase implements WebQQAPIInterface{
 		hc.setRequestProperty("Referer","http://d.web2.qq.com/proxy.html?v=20110331002&callback=2");
 		String ptwebqq=hc.getCookies().get("ptwebqq");
 		String ptuserinfo=hc.getCookies().get("ptuserinfo");
-		String param="r={\"status\":\"online\",\"ptwebqq\":\""+ptwebqq+"\",\"passwd_sig\":\"\",\"clientid\":\""+ptuserinfo+"\",\"psessionid\":null}&clientid="+ptuserinfo+"&psessionid=null";
-		this.setRequestString(param);
+		String param="r={\"status\":\""+onlinestatu.toString().toLowerCase()+"\",\"ptwebqq\":\""+ptwebqq+"\",\"passwd_sig\":\"\",\"clientid\":\""+ptuserinfo+"\",\"psessionid\":null}&clientid="+ptuserinfo+"&psessionid=null";
+		this.setRequestPostString(param);
 	}
 
 	@Override
@@ -57,8 +64,25 @@ public class LoginAPI extends APIBase implements WebQQAPIInterface{
 			jsonObject=jsonObject.getJSONObject("result");
 			this.user.setClientid(hc.getCookies().get("ptuserinfo"));
 			this.user.setPsessionid(jsonObject.getString("psessionid"));
+			this.user.setVfwebqq(jsonObject.getString("vfwebqq"));
 		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public JSONObject getResponseJson(){
+		JSONObject json=JSONObject.fromObject(this.getResponseString());
+		return json;
+	}
+	
+	public OnlineStatu getStatu() {
+		return onlinestatu;
+	}
+
+	public void setStatu(OnlineStatu statu) {
+		this.onlinestatu = statu;
+	}
 
 }

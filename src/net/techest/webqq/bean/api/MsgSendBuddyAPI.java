@@ -19,24 +19,45 @@
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
-import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
+import net.techest.webqq.net.HttpClient.REQ_TYPE;
 
-/**获取在线的好友
+/**消息发送API
  * 
  * @author haku
  *
  */
-public class GetOnlineFriendsAPI extends CommonAPI{
+public class MsgSendBuddyAPI extends CommonAPI{
 	
-	public GetOnlineFriendsAPI(){
-		this.setRequestType(REQ_TYPE.GET);
-		this.setRequestURI("http://d.web2.qq.com/channel/get_online_buddies2");
+	private String txt;
+	
+	private long toWhom;
+	
+	public MsgSendBuddyAPI(){
+		this.setRequestType(REQ_TYPE.POST);
+		this.setRequestURI("http://d.web2.qq.com/channel/send_buddy_msg2");
 	}
 
 	@Override
-	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
-		
+	public void initParam(QueryParam requestGetParam,JSONObject json) {
+		JSONObject newj=JSONObject.fromObject("{\"to\":"+this.getToWhom()+",\"face\":564,\"content\":\"[\\\""+this.getTxt()+"\\\"]\",\"msg_id\":123123123}");
+		newj.put("clientid", json.get("clientid"));
+		newj.put("psessionid", json.get("psessionid"));
 	}
-	
+
+	public long getToWhom() {
+		return toWhom;
+	}
+
+	public void setToWhom(long toWhom) {
+		this.toWhom = toWhom;
+	}
+
+	public String getTxt() {
+		return txt;
+	}
+
+	public void setTxt(String txt) {
+		this.txt = txt;
+	}
 }

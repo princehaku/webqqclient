@@ -27,7 +27,7 @@ import javax.swing.ImageIcon;
  * @author princehaku
  *
  */
-public class VerifyImage implements FileProcess{
+public class VerifyImage implements IFileProcess{
 	/**唯一标识符 一般说来是用户的qq号码
 	 * 
 	 */

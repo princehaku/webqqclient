@@ -19,24 +19,37 @@
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
-import net.techest.webqq.net.HttpClient.REQ_TYPE;
+import net.techest.webqq.client.OnlineStatu;
 import net.techest.webqq.net.QueryParam;
+import net.techest.webqq.net.HttpClient.REQ_TYPE;
 
-/**获取在线的好友
+/**改变在线状态
  * 
  * @author haku
  *
  */
-public class GetOnlineFriendsAPI extends CommonAPI{
+public class ChangeStatuAPI extends CommonAPI{
 	
-	public GetOnlineFriendsAPI(){
+	private OnlineStatu onlinestatu=OnlineStatu.ONLINE;
+	
+	public ChangeStatuAPI(){
 		this.setRequestType(REQ_TYPE.GET);
-		this.setRequestURI("http://d.web2.qq.com/channel/get_online_buddies2");
+		this.setRequestURI("http://d.web2.qq.com/channel/change_status2");
 	}
 
 	@Override
-	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
-		
+	public void initParam(QueryParam requestGetParam,JSONObject json) {
+		requestGetParam.put("newstatus", this.onlinestatu.toString().toLowerCase());
+		System.out.println("父级的"+requestGetParam.toString());
+		System.out.println("我的"+this.requestJson.toString());
 	}
+
 	
+	public OnlineStatu getOnlineStatu() {
+		return onlinestatu;
+	}
+
+	public void setOnlineStatu(OnlineStatu statu) {
+		this.onlinestatu = statu;
+	}
 }

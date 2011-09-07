@@ -3,6 +3,7 @@
 	<name>webqqclient</name>
 	<comment></comment>
 	<projects>
+		<project>javaqq</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

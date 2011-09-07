@@ -21,7 +21,7 @@ package net.techest.webqq.action;
 import net.sf.json.JSONObject;
 import net.techest.webqq.bean.QQUser;
 import net.techest.webqq.bean.api.PullDataAPI;
-import net.techest.webqq.client.dialog.OnlineStatu;
+import net.techest.webqq.client.OnlineStatu;
 import net.techest.webqq.sso.Action;
 
 /**获取服务器返回给客户机的消息
@@ -70,15 +70,17 @@ public class MessagePullThread extends Thread implements Action{
 			try {
 					api.process();
 					JSONObject jsonObject = api.getResponseJson();
-					System.out.println(jsonObject.toString());
 					
-					if(jsonObject.getLong("retcode")!=0){
-						this.setToEnd(true);
-					}
+					System.out.println(jsonObject.toString());
+//					
+//					if(jsonObject.getLong("retcode")!=0&&jsonObject.getLong("retcode")!=102){
+//						this.setToEnd(true);
+//					}
 					this.callBack();
 			} catch (Exception e1) {
 				//这里有可能是超时了  所以再根据messagecode细分一下进行处理
-				if(!e1.getMessage().equals("connect timed out")){
+				//e1.getMessage().equals("connect timed out")||
+				if(!(e1.getMessage().equals("Read timed out"))){
 					e1.printStackTrace();
 					this.setToEnd(true);
 				}
@@ -88,9 +90,12 @@ public class MessagePullThread extends Thread implements Action{
 		//设置服务窗口
 		this.loginUser.getServerContext().setLiveStatu(OnlineStatu.OFFLINE);
 	}
-
+	/**推送到消息队列
+	 * 
+	 * @param jsonObject
+	 */
 	private void pushToMessage(JSONObject jsonObject) {
-		//loginUser.getServerContext().getMessageQueue();
+		this.loginUser.getServerContext().getMessageQueue().add(jsonObject);
 	}
 
 

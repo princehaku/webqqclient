@@ -31,6 +31,9 @@ import net.techest.webqq.bean.WebQQUser;
 import net.techest.webqq.bean.api.APIBase;
 import net.techest.webqq.bean.api.WEBQQAPIFacroty;
 import net.techest.webqq.bean.api.WebQQAPIInterface;
+import net.techest.webqq.client.MessageQueue;
+import net.techest.webqq.client.MessageReceiver;
+import net.techest.webqq.client.OnlineStatu;
 import net.techest.webqq.net.HttpClient;
 import net.techest.webqq.sso.AbstractLoginAction;
 import net.techest.webqq.sso.LoginStatu;
@@ -58,10 +61,15 @@ public class ServerDialog extends Thread implements Observer{
 	private AbstractLoginAction loginAction;
 	
 	private OnlineStatu onlineStatu;
+	/**消息接收队列
+	 * 
+	 */
+	private MessageQueue messageQueue;
 	
 	public ServerDialog(QQUser user){
 		this.loginUser=user;
 		this.loginUser.setServerContext(this);
+		this.setMessageQueue(new MessageQueue());
 	}
 	/**设置登录处理器
 	 * 
@@ -123,6 +131,7 @@ public class ServerDialog extends Thread implements Observer{
 	public  synchronized void inputVerify(String verifyCode){
 		try {
 			getLoginAction().loginVerify(verifyCode);
+			getLoginAction().callBack();
 		} catch (Exception e) {
 			this.loginAction.setLoginStatu(LoginStatu.VERIFY_ERROR);
 		}
@@ -186,6 +195,13 @@ public class ServerDialog extends Thread implements Observer{
 		}
 		
 		return api;
+	}
+	
+	public MessageQueue getMessageQueue() {
+		return messageQueue;
+	}
+	public void setMessageQueue(MessageQueue messageQueue) {
+		this.messageQueue = messageQueue;
 	}
 	
 }

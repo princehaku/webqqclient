@@ -21,6 +21,7 @@ package net.techest.webqq.bean.api;
 import net.sf.json.JSONObject;
 import net.techest.webqq.bean.WebQQUser;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
+import net.techest.webqq.net.QueryParam;
 
 /**大多数的webqq的api都要求传递cliendid和psessionid
  * 所以这个分离成了基类
@@ -32,6 +33,16 @@ import net.techest.webqq.net.HttpClient.REQ_TYPE;
 public abstract class CommonAPI  extends APIBase implements WebQQAPIInterface{
 
 	protected WebQQUser user;
+
+	/**请求的json
+	 * 
+	 */
+	protected JSONObject requestJson;
+
+	/**响应回的json
+	 * 
+	 */
+	protected JSONObject responseJson;
 	
 	public CommonAPI(){
 		this.setRequestType(REQ_TYPE.POST);
@@ -41,28 +52,46 @@ public abstract class CommonAPI  extends APIBase implements WebQQAPIInterface{
 		super(apiName);
 		this.setRequestType(REQ_TYPE.POST);
 	}
-	
-	abstract public void initParam(JSONObject requestJson);
+	/**第一个参数是get上面的
+	 * 第二个参数是post的json的r部分
+	 * @param requestGet
+	 * @param requestJson
+	 */
+	abstract public void initParam(QueryParam requestGet,JSONObject requestJson);
 	
 	@Override
 	public void init(WebQQUser user) {
 		this.user=user;
 		hc=user.getServerContext().getHttpClient();
 		hc.setRequestProperty("Referer","http://d.web2.qq.com/proxy.html?v=20110331002&callback=2");
-		String param="{\"clientid\":\""+user.getClientid()+"\",\"psessionid\":\""+user.getPsessionid()+"\",\"key\":0,\"ids\":[]}";
-		JSONObject json=JSONObject.fromObject(param);
-		this.initParam(json);
-		this.setRequestJson(json);
+		String param="{\"vfwebqq\":\""+user.getVfwebqq()+"\",\"clientid\":\""+user.getClientid()+"\",\"psessionid\":\""+user.getPsessionid()+"\",\"key\":0,\"ids\":[]}";
+		setRequestJson(JSONObject.fromObject(param));
+		//requestData=json;
 	}
 	
 	@Override
 	public void process() throws Exception{
-		setRequestString("r="+getRequestJson().toString()+"&clientid="+user.getClientid()+"&psessionid="+user.getPsessionid());
-		JSONObject tmp=this.requestJson;
-		setRequestJson(null);
+		//在提交前设置参数
+		
+		QueryParam requestGet=new QueryParam();
+		this.initParam(requestGet,getRequestJson());
+		this.setRequestGetString(requestGet.toString()+"&clientid="+user.getClientid()+"&psessionid="+user.getPsessionid());
+		setRequestPostString("r="+getRequestJson().toString()+"&clientid="+user.getClientid()+"&psessionid="+user.getPsessionid());
+	
+		
 		super.process();
-		setRequestJson(tmp);
-		setRequestString("");
+	}
+	public JSONObject getRequestJson() {
+		return requestJson;
+	}
+
+	public void setRequestJson(JSONObject requestJson) {
+		this.requestJson = requestJson;
+	}
+	
+	public JSONObject getResponseJson(){
+		JSONObject json=JSONObject.fromObject(this.getResponseString());
+		return json;
 	}
 
 	@Override

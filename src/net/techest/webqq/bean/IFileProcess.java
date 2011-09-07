@@ -25,6 +25,6 @@ import java.io.IOException;
  * @author princehaku
  *
  */
-public interface FileProcess {
+public interface IFileProcess {
 	public void saveTo(String path) throws IOException;
 }

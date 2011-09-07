@@ -161,7 +161,7 @@ public class HttpClient implements Cloneable{
 
 		try {
 			httpConn = (HttpURLConnection) turl.openConnection();
-			httpConn.setConnectTimeout(this.responseTimerOut);
+			httpConn.setConnectTimeout(30000);
 			httpConn.setReadTimeout(this.responseTimerOut);
 			if (getRequestType().equals(REQ_TYPE.GET.toString())) {
 				httpConn.setRequestMethod("GET");

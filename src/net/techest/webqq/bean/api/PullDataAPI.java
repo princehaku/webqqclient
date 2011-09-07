@@ -20,6 +20,7 @@ package net.techest.webqq.bean.api;
 
 
 import net.sf.json.JSONObject;
+import net.techest.webqq.net.QueryParam;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 
 /**从服务器拉取消息
@@ -35,7 +36,7 @@ public class PullDataAPI extends CommonAPI{
 	}
 
 	@Override
-	public void initParam(JSONObject requestJson) {
+	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
 		this.getHc().setResponseTimeOut(120000);
 	}
 }

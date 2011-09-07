@@ -24,11 +24,13 @@ import java.io.InputStreamReader;
 
 import net.techest.util.Log4j;
 import net.techest.webqq.bean.api.APIBase;
+import net.techest.webqq.bean.api.ChangeStatuAPI;
+import net.techest.webqq.client.OnlineStatu;
 import net.techest.webqq.client.dialog.ServerDialog;
 import net.techest.webqq.sso.AbstractLoginAction;
 import net.techest.webqq.sso.LoginStatu;
 
-public class WebQQLoginResponseHandle extends AbstractResponseHandle {
+public class WebQQLoginResponseHandle implements AbstractResponseHandle {
 
 	private ServerDialog sd;
 	
@@ -37,10 +39,18 @@ public class WebQQLoginResponseHandle extends AbstractResponseHandle {
 	}
 
 	@Override
-	public void handle(AbstractLoginAction loginAction) {
+	public void handle(Object obj) {
+
+		AbstractLoginAction loginAction =(AbstractLoginAction) obj;
 		
 		if(loginAction.getStatu().equals(LoginStatu.NEED_VERIFY)){
 			Log4j.getInstance().debug("请输入验证码");
+			try {
+				loginAction.getVerifyImage().saveTo("img.jpg");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				Log4j.getInstance().error("写入验证码错误");
+			}
 			BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 			try {
 				sd.inputVerify(br.readLine());
@@ -50,10 +60,12 @@ public class WebQQLoginResponseHandle extends AbstractResponseHandle {
 			}
 		}
 		
-		APIBase api=this.sd.getWebQQAPI("webqq_get_online_friends");
+		APIBase api=this.sd.getWebQQAPI("webqq_change_statu");
 		try {
+			System.out.println("设置为离开");
+			((ChangeStatuAPI)api).setOnlineStatu(OnlineStatu.AWAY);
 			api.process();
-			System.out.println(api.getRequestString());
+			System.out.println("服务器返回"+api.getResponseString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

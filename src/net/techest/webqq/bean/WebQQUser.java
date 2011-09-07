@@ -17,18 +17,39 @@
  */
 
 package net.techest.webqq.bean;
-/**登录进webqq的需要有clientid和psessionid
+/**这个代表一个webqq登录的用户
+ * 登录进webqq的需要有clientid和psessionid
  * 才能进行其他的qq相关操作
- * 这两个值会在登录成功后自动注入
+ * vfwebqq在执行某些操作的时候属性才需要
+ * 会话的clientid 这个是由客户端随机产生一个数字
+ * psessionid由服务器获得 之后不变
+ * 这三个值会在登录成功后自动注入
  * @author princehaku
  *
  */
 public class WebQQUser extends QQUser{
-	
+	/**会话的clientid 这个是由客户端随机产生一个数字
+	 * 但是之后的效验都需要他
+	 * 
+	 */
 	String clientid="";
-	
+	/**session
+	 * 由服务器获得 之后不变
+	 */
 	String psessionid="";
+	/**加密token
+	 * 由服务器获得 之后不变
+	 */
+	String vfwebqq="";
 	
+	public String getVfwebqq() {
+		return vfwebqq;
+	}
+
+	public void setVfwebqq(String vfwebqq) {
+		this.vfwebqq = vfwebqq;
+	}
+
 	public String getClientid() {
 		return clientid;
 	}

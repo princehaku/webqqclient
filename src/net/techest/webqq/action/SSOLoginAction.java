@@ -59,6 +59,11 @@ public class SSOLoginAction extends AbstractLoginAction implements Action{
 	
 	VerifyImage verifyImage;
 	
+	/**注意他会自动执行loginVerify里面的代码
+	 * 如果获取到了的话
+	 * 
+	 * 执行完毕的时候会调用callback
+	 */
 	@Override
 	public void doit() throws ActionException {
 		if(this.getUser()==null){
@@ -75,8 +80,10 @@ public class SSOLoginAction extends AbstractLoginAction implements Action{
 					//如果需要验证码  则把验证码下载回来 放入
 					this.pullVerifyImage();
 			}
-
+			
+			this.callBack();
 		} catch (Exception e) {
+			this.callBack();
 			throw new ActionException("连接失败 "+e.getMessage());
 		}
 	}
@@ -97,7 +104,6 @@ public class SSOLoginAction extends AbstractLoginAction implements Action{
 		byte[] content=hc.exec();
 		this.verifyImage=new VerifyImage(content);
 		Log4j.getInstance().debug("VERIFY :  验证图片下载完毕");
-		this.verifyImage.saveTo("img.jpg");
 	}
 	/**登录 需要验证码
 	 * @throws Exception 

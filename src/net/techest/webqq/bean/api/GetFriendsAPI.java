@@ -19,6 +19,7 @@
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
+import net.techest.webqq.net.QueryParam;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 
 /**获取好友名单
@@ -34,7 +35,7 @@ public class GetFriendsAPI extends CommonAPI{
 	}
 
 	@Override
-	public void initParam(JSONObject requestJson) {
+	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
 		
 	}
 }

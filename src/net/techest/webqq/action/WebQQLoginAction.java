@@ -45,27 +45,29 @@ public class WebQQLoginAction extends SSOLoginAction implements Action{
 	/**执行回调
 	 * 
 	 */
+	@Override
 	public void callBack(){
-		//回调
-		if(resp!=null){
-			this.resp.handle(this);
-		}
-	}
-
-	public void doit() throws ActionException {
-		super.doit();
 		if (this.getStatu().equals(LoginStatu.SUCCESS)) {
 			try {
 				this.loginToQQ();
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new ActionException("登录到QQ失败" + e.getMessage());
+				this.setLoginStatu(LoginStatu.UIN_ERROR);
+				//throw new ActionException("登录到QQ失败" + e.getMessage());
 			}
 		}
-		//执行验证回调
-		this.callBack();
-	}
 
+		//通知操作
+		this.notifyResponseHandle();
+		
+	}
+	
+	public void notifyResponseHandle(){
+		//回调
+		if(resp!=null){
+			this.resp.handle(this);
+		}
+	}
 	/**
 	 * 
 	 * 需要先执行了SSOLOGIN才能使用WEBQQ的登录 如果这里登录失败 则将状态回写

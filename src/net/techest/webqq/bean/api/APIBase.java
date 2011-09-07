@@ -68,18 +68,14 @@ public abstract class APIBase implements Cloneable,APICallBack{
 	public void setRequestType(REQ_TYPE requestType) {
 		this.requestType = requestType;
 	}
-	/**请求的json
+	/**请求的Post字符串
 	 * 
 	 */
-	protected JSONObject requestJson;
-	/**响应回的json
+	protected String requestPostString;
+	/**请求的GET字符串
 	 * 
 	 */
-	protected JSONObject responseJson;
-	/**请求的字符串
-	 * 
-	 */
-	protected String requestString;
+	protected String requestGetString;
 	/**返回的字符串
 	 * 
 	 */
@@ -94,44 +90,40 @@ public abstract class APIBase implements Cloneable,APICallBack{
 	protected HttpClient hc;
 	
 	public void process() throws Exception{
-		this.hc.setUrl(this.requestURI+"?"+this.getPostString());
 		this.hc.setRequestType(requestType);
-		this.hc.setPostString(getPostString());
+		if(this.getRequestGetString()!=null&&!this.getRequestGetString().equals("")){
+			this.hc.setUrl(this.requestURI+"?"+this.getRequestGetString());
+		}else{
+			this.hc.setUrl(this.requestURI);
+		}
+		if(!this.getRequestType().equals(REQ_TYPE.GET)){
+			this.hc.setPostString(this.getRequestPostString());
+		}
+		Log4j.getInstance().debug("Request : " + getRequestString());
 		content=this.hc.exec();
 		responseString=new String(content);
-		Log4j.getInstance().debug(responseString);
+		Log4j.getInstance().debug("Response : " + responseString);
 		this.callback();
 	}
 	
+	public  String getRequestString() {
+		return "\nGET: "+this.getRequestGetString()+"\nPOST:"+this.getRequestPostString()+"\n";
+	}
 	abstract public void callback();
-	
-	/**得到传送字符串 优先使用json解析的
-	 * 如果有json 则忽略requeststring
-	 * 
-	 * @return
-	 */
-	public String getPostString() {
-		if(requestJson!=null){
-			return requestJson.toString();
-		}else{
-			Log4j.getInstance().debug(this.requestString);
-			return this.requestString;
-		}
+
+	public String getRequestPostString() {
+		return requestPostString;
+	}
+	public void setRequestPostString(String requestPostString) {
+		this.requestPostString = requestPostString;
+	}
+	public String getRequestGetString() {
+		return requestGetString;
+	}
+	public void setRequestGetString(String requestGetString) {
+		this.requestGetString = requestGetString;
 	}
 
-	public void setRequestJson(JSONObject requestJson) {
-		this.requestJson = requestJson;
-	}
-
-	public void setRequestString(String request) {
-		this.requestString = request;
-	}
-	
-	public JSONObject getResponseJson() {
-		responseJson = JSONObject.fromObject(getResponseString());
-		return responseJson;
-	}
-	
 	public String getResponseString() {
 		return responseString;
 	}
@@ -142,18 +134,15 @@ public abstract class APIBase implements Cloneable,APICallBack{
 	public REQ_TYPE getRequestType() {
 		return requestType;
 	}
-	public JSONObject getRequestJson() {
-		return requestJson;
-	}
-	public String getRequestString() {
-		return requestString;
-	}
+	
 	public byte[] getContent() {
 		return content;
 	}
+	
 	public HttpClient getHc() {
 		return hc;
 	}
+	
 	public void setHc(HttpClient  hc) {
 		this.hc=hc;
 	}
@@ -166,7 +155,7 @@ public abstract class APIBase implements Cloneable,APICallBack{
 			// call clone in Object.
 			return super.clone();
 			} catch(CloneNotSupportedException e) {
-			System.out.println("Cloning not allowed.");
+				System.out.println("Cloning not allowed.");
 			return this;
 			} 
 	}

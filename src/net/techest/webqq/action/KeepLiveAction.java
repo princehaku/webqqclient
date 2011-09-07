@@ -12,14 +12,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *
- *  Created on : 2011-9-4, 下午6:29:55
+ *  Created on : 2011-9-6, 下午2:15:43
  *  Author     : princehaku
  */
 
-package net.techest.webqq.response;
+package net.techest.webqq.action;
 
+public class KeepLiveAction {
 
-
-public interface AbstractResponseHandle {
-		public void handle(Object loginAction);
 }

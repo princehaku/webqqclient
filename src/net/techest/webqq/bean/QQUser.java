@@ -11,8 +11,11 @@ import net.techest.webqq.client.dialog.ServerDialog;
  * @author haku
  */
 public class QQUser {
-    /**用户唯一标志 (QQ号码)
-     * 
+    /**用户唯一标志
+     * 一般说来应该是QQ号码
+     * 但是实际上只有用户自己的是qq号码
+     * 其他的用户均是一个随机的值
+     * 会变动
      */
 	private String uin;
     /**用户密码

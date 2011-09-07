@@ -28,7 +28,7 @@ public interface Action {
 	public void doit() throws ActionException;
 	/**执行后的回调
 	 * 不会自动执行
-	 * 请加载doit后面或者任何你想执行的地方
+	 * 请加载到doit后面或者任何你想执行的地方
 	 */
 	public void callBack();
 }
