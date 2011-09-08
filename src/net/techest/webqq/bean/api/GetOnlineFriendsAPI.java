@@ -27,7 +27,7 @@ import net.techest.webqq.net.QueryParam;
  * @author haku
  *
  */
-public class GetOnlineFriendsAPI extends CommonAPI{
+public class GetOnlineFriendsAPI extends CommonJsonAPI{
 	
 	public GetOnlineFriendsAPI(){
 		this.setRequestType(REQ_TYPE.GET);

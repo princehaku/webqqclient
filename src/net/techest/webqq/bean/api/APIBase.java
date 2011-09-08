@@ -18,7 +18,6 @@
 
 package net.techest.webqq.bean.api;
 
-import net.sf.json.JSONObject;
 import net.techest.util.Log4j;
 import net.techest.webqq.net.HttpClient;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
@@ -91,24 +90,29 @@ public abstract class APIBase implements Cloneable,APICallBack{
 	
 	public void process() throws Exception{
 		this.hc.setRequestType(requestType);
+		//如果getString的串不是空 就设置到url后面
 		if(this.getRequestGetString()!=null&&!this.getRequestGetString().equals("")){
 			this.hc.setUrl(this.requestURI+"?"+this.getRequestGetString());
 		}else{
 			this.hc.setUrl(this.requestURI);
 		}
-		if(!this.getRequestType().equals(REQ_TYPE.GET)){
+		//如果是POST类型的 设置好传送正文
+		if(this.getRequestType().equals(REQ_TYPE.POST)){
 			this.hc.setPostString(this.getRequestPostString());
 		}
-		Log4j.getInstance().debug("Request : " + getRequestString());
+		Log4j.getInstance().debug("Request : " + toString());
 		content=this.hc.exec();
 		responseString=new String(content);
 		Log4j.getInstance().debug("Response : " + responseString);
 		this.callback();
 	}
 	
-	public  String getRequestString() {
-		return "\nGET: "+this.getRequestGetString()+"\nPOST:"+this.getRequestPostString()+"\n";
+	public  String toString() {
+		return "\nGET: "+this.getRequestGetString()+
+				"\nPOST:"+this.getRequestPostString()+
+				"\n Response : "+this.getResponseString();
 	}
+	
 	abstract public void callback();
 
 	public String getRequestPostString() {
@@ -135,17 +139,32 @@ public abstract class APIBase implements Cloneable,APICallBack{
 		return requestType;
 	}
 	
-	public byte[] getContent() {
+	/**得到返回的原始数据
+	 * 
+	 * @return
+	 */
+	public byte[] getReturnRawContent() {
 		return content;
 	}
 	
+	/**得到连接器
+	 * 
+	 * @return
+	 */
 	public HttpClient getHc() {
 		return hc;
 	}
-	
+	/**设置连接器
+	 * 
+	 * @param hc
+	 */
 	public void setHc(HttpClient  hc) {
 		this.hc=hc;
 	}
+	/**设置api的名字
+	 * 
+	 * @param apiName
+	 */
 	public void setApiName(String apiName) {
 		this.apiName = apiName;
 	}

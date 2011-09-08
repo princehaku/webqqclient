@@ -27,7 +27,7 @@ import net.techest.webqq.net.HttpClient.REQ_TYPE;
  * @author haku
  *
  */
-public class GetFriendsAPI extends CommonAPI{
+public class GetFriendsAPI extends CommonJsonAPI{
 	
 	public GetFriendsAPI(){
 		this.setRequestType(REQ_TYPE.POST);

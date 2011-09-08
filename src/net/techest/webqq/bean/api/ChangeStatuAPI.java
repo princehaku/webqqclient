@@ -25,10 +25,10 @@ import net.techest.webqq.net.HttpClient.REQ_TYPE;
 
 /**改变在线状态
  * 
+ * 参数onlinestatu
  * @author haku
- *
  */
-public class ChangeStatuAPI extends CommonAPI{
+public class ChangeStatuAPI extends CommonJsonAPI{
 	
 	private OnlineStatu onlinestatu=OnlineStatu.ONLINE;
 	

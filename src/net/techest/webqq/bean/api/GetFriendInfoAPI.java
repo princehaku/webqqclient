@@ -22,43 +22,32 @@ import net.sf.json.JSONObject;
 import net.techest.webqq.net.QueryParam;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 
-/**消息发送API
+/**得到好友的资料
+ * 也可以得到自己的 
  * 
- * 参数 long toWhom
- * 参数 txt
+ * 参数Uin
  * @author haku
+ *
  */
-public class MsgSendBuddyAPI extends CommonJsonAPI{
+public class GetFriendInfoAPI extends CommonJsonAPI{
 	
-	private String txt;
+	private String uin;
 	
-	private long toWhom;
-	
-	public MsgSendBuddyAPI(){
+	public GetFriendInfoAPI(){
 		this.setRequestType(REQ_TYPE.POST);
-		this.setRequestURI("http://d.web2.qq.com/channel/send_buddy_msg2");
+		this.setRequestURI("http://s.web2.qq.com/api/get_friend_info2");
 	}
 
 	@Override
-	public void initParam(QueryParam requestGetParam,JSONObject json) {
-		JSONObject newj=JSONObject.fromObject("{\"to\":"+this.getToWhom()+",\"face\":564,\"content\":\"[\\\""+this.getTxt()+"\\\"]\",\"msg_id\":123123123}");
-		newj.put("clientid", json.get("clientid"));
-		newj.put("psessionid", json.get("psessionid"));
+	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
+		requestGetParam.put("tuin", getUin());
 	}
 
-	public long getToWhom() {
-		return toWhom;
+	public String getUin() {
+		return uin;
 	}
 
-	public void setToWhom(long toWhom) {
-		this.toWhom = toWhom;
-	}
-
-	public String getTxt() {
-		return txt;
-	}
-
-	public void setTxt(String txt) {
-		this.txt = txt;
+	public void setUin(String uin) {
+		this.uin = uin;
 	}
 }

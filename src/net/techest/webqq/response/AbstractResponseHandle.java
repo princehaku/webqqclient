@@ -21,5 +21,5 @@ package net.techest.webqq.response;
 
 
 public interface AbstractResponseHandle {
-		public void handle(Object loginAction);
+		public void handle(Object obj);
 }

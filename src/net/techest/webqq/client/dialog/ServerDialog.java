@@ -29,6 +29,7 @@ import net.techest.webqq.action.WebQQLoginAction;
 import net.techest.webqq.bean.QQUser;
 import net.techest.webqq.bean.WebQQUser;
 import net.techest.webqq.bean.api.APIBase;
+import net.techest.webqq.bean.api.GetFaceAPI;
 import net.techest.webqq.bean.api.WEBQQAPIFacroty;
 import net.techest.webqq.bean.api.WebQQAPIInterface;
 import net.techest.webqq.client.MessageQueue;
@@ -39,13 +40,13 @@ import net.techest.webqq.sso.AbstractLoginAction;
 import net.techest.webqq.sso.LoginStatu;
 
 /**每一个客户端于服务器交互均会创建一个这个
- * 同时这也是一个观察者
- * 当有状态消息变更时 更新自身状态消息链
- * 以供其他部分使用
+ *
+ * 当有状态消息变更时 
+ * 更新自身消息接收链
  * @author princehaku
  *
  */
-public class ServerDialog extends Thread implements Observer{
+public class ServerDialog extends Thread {
 	
 	private QQUser loginUser;
 	/**消息获取器
@@ -61,15 +62,15 @@ public class ServerDialog extends Thread implements Observer{
 	private AbstractLoginAction loginAction;
 	
 	private OnlineStatu onlineStatu;
-	/**消息接收队列
+	/**消息接收链
 	 * 
 	 */
 	private MessageQueue messageQueue;
 	
 	public ServerDialog(QQUser user){
+		this.messageQueue=new MessageQueue();
 		this.loginUser=user;
 		this.loginUser.setServerContext(this);
-		this.setMessageQueue(new MessageQueue());
 	}
 	/**设置登录处理器
 	 * 
@@ -85,7 +86,7 @@ public class ServerDialog extends Thread implements Observer{
 			//发起验证连接
 			this.userAuth();			
 			int i=0;
-			//如果需要验证码 则等待输入
+			//如果需要验证码 则等待
 			if(getLoginAction().getStatu().equals(LoginStatu.NEED_VERIFY)){
 				Log4j.getInstance().debug("需要验证码");
 				try {
@@ -135,6 +136,7 @@ public class ServerDialog extends Thread implements Observer{
 		} catch (Exception e) {
 			this.loginAction.setLoginStatu(LoginStatu.VERIFY_ERROR);
 		}
+		//唤醒进程
 		this.notify();
 	}
 	/**登录处理
@@ -173,11 +175,6 @@ public class ServerDialog extends Thread implements Observer{
     public HttpClient getHttpClient() {
         return InstanceHolder.instance;
     }
-    
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		
-	}
 	
 	public APIBase getWebQQAPI(String apiName){
 		APIBase api = null;
@@ -200,8 +197,9 @@ public class ServerDialog extends Thread implements Observer{
 	public MessageQueue getMessageQueue() {
 		return messageQueue;
 	}
-	public void setMessageQueue(MessageQueue messageQueue) {
-		this.messageQueue = messageQueue;
+	
+	public QQUser getUser() {
+		return this.loginUser;
 	}
 	
 }

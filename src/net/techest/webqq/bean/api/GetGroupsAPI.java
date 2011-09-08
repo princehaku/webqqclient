@@ -27,7 +27,7 @@ import net.techest.webqq.net.HttpClient.REQ_TYPE;
  * @author haku
  *
  */
-public class GetGroupsAPI extends CommonAPI{
+public class GetGroupsAPI extends CommonJsonAPI{
 	
 	public GetGroupsAPI(){
 		this.setRequestType(REQ_TYPE.POST);

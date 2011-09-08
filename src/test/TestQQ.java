@@ -18,6 +18,7 @@
 package test;
 import java.io.IOException;
 
+import net.sf.json.JSONObject;
 import net.techest.webqq.action.WebQQLoginAction;
 import net.techest.webqq.bean.QQUser;
 import net.techest.webqq.bean.WebQQUser;
@@ -33,7 +34,7 @@ public class TestQQ {
 	 */
 	public static void main(String[] args) throws IOException {
 		QQUser u=new WebQQUser();
-		u.setUin("389663316");
+		u.setUin("3189663316");
 		u.setPassword("!52dearesta3");
 		//打开一个新的服务器会话
 		ServerDialog sd=new ServerDialog(u);
@@ -41,6 +42,11 @@ public class TestQQ {
 		//设置登录回调
 		((WebQQLoginAction)sd.getLoginAction()).setResponseHandle(new WebQQLoginResponseHandle(sd));
 		sd.start();
+
+		while(1==1){
+			JSONObject rjson= sd.getMessageQueue().pull();
+			System.out.println("消息到来"+rjson);
+		}
 		
 	}
 

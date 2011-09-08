@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 import net.techest.util.Log4j;
 import net.techest.webqq.bean.api.APIBase;
 import net.techest.webqq.bean.api.ChangeStatuAPI;
+import net.techest.webqq.bean.api.GetFaceAPI;
+import net.techest.webqq.bean.api.GetFriendInfoAPI;
 import net.techest.webqq.client.OnlineStatu;
 import net.techest.webqq.client.dialog.ServerDialog;
 import net.techest.webqq.sso.AbstractLoginAction;
@@ -60,10 +62,9 @@ public class WebQQLoginResponseHandle implements AbstractResponseHandle {
 			}
 		}
 		
-		APIBase api=this.sd.getWebQQAPI("webqq_change_statu");
+		APIBase api=this.sd.getWebQQAPI("webqq_get_face");
 		try {
-			System.out.println("设置为离开");
-			((ChangeStatuAPI)api).setOnlineStatu(OnlineStatu.AWAY);
+			((GetFaceAPI)api).setUin(loginAction.getUser().getUin());
 			api.process();
 			System.out.println("服务器返回"+api.getResponseString());
 		} catch (Exception e) {

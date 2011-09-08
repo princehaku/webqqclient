@@ -19,46 +19,42 @@
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
+import net.techest.webqq.bean.Image;
 import net.techest.webqq.net.QueryParam;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 
-/**消息发送API
+/**获取头像
  * 
- * 参数 long toWhom
- * 参数 txt
+ * 参数Uin
  * @author haku
  */
-public class MsgSendBuddyAPI extends CommonJsonAPI{
+public class GetFaceAPI extends CommonDataAPI{
 	
-	private String txt;
+	private String uin;
 	
-	private long toWhom;
-	
-	public MsgSendBuddyAPI(){
-		this.setRequestType(REQ_TYPE.POST);
-		this.setRequestURI("http://d.web2.qq.com/channel/send_buddy_msg2");
+	public GetFaceAPI(){
+		this.setRequestType(REQ_TYPE.GET);
+		this.setRequestURI("http://face.qun.qq.com/cgi/svr/face/getface");
 	}
 
 	@Override
-	public void initParam(QueryParam requestGetParam,JSONObject json) {
-		JSONObject newj=JSONObject.fromObject("{\"to\":"+this.getToWhom()+",\"face\":564,\"content\":\"[\\\""+this.getTxt()+"\\\"]\",\"msg_id\":123123123}");
-		newj.put("clientid", json.get("clientid"));
-		newj.put("psessionid", json.get("psessionid"));
+	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
+		requestGetParam.put("uin", getUin());
 	}
 
-	public long getToWhom() {
-		return toWhom;
+	public String getUin() {
+		return uin;
 	}
 
-	public void setToWhom(long toWhom) {
-		this.toWhom = toWhom;
+	public void setUin(String uin) {
+		this.uin = uin;
 	}
-
-	public String getTxt() {
-		return txt;
+	/**得到响应回的图片
+	 * 
+	 * @return
+	 */
+	public Image getResponseImage(){
+		return new Image(getReturnRawContent());
 	}
-
-	public void setTxt(String txt) {
-		this.txt = txt;
-	}
+	
 }

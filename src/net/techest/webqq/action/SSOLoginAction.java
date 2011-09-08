@@ -81,11 +81,12 @@ public class SSOLoginAction extends AbstractLoginAction implements Action{
 					this.pullVerifyImage();
 			}
 			
-			this.callBack();
 		} catch (Exception e) {
+			e.printStackTrace();
 			this.callBack();
 			throw new ActionException("连接失败 "+e.getMessage());
 		}
+		this.callBack();
 	}
 	/**得到验证图片 
 	 * 有可能为null

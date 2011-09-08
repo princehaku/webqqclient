@@ -30,13 +30,13 @@ public abstract class APIFacroty {
 	protected HashMap<String, APIBase> apis=new HashMap<String, APIBase>();
 	/**根据名称得到一个API
 	 * 注意这个api每次得到的都不一样
-	 * 都是从注册的池里面克隆出来的新的实例
+	 * 都是从注册的池里面的新的实例
 	 * @param name
 	 * @return
 	 */
 	public APIBase getApiByName(String name) throws Exception{
 		APIBase api=apis.get(name);
-		return (APIBase) api.clone();
+		return api.getClass().newInstance();
 	}
 	
 	public void registerApi(APIBase api){

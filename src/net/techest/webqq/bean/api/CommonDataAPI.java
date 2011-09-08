@@ -30,7 +30,7 @@ import net.techest.webqq.net.QueryParam;
  * @author haku
  *
  */
-public abstract class CommonAPI  extends APIBase implements WebQQAPIInterface{
+public abstract class CommonDataAPI  extends APIBase implements WebQQAPIInterface{
 
 	protected WebQQUser user;
 
@@ -38,17 +38,12 @@ public abstract class CommonAPI  extends APIBase implements WebQQAPIInterface{
 	 * 
 	 */
 	protected JSONObject requestJson;
-
-	/**响应回的json
-	 * 
-	 */
-	protected JSONObject responseJson;
 	
-	public CommonAPI(){
+	public CommonDataAPI(){
 		this.setRequestType(REQ_TYPE.POST);
 	}
 	
-	public CommonAPI(String apiName){
+	public CommonDataAPI(String apiName){
 		super(apiName);
 		this.setRequestType(REQ_TYPE.POST);
 	}
@@ -77,21 +72,15 @@ public abstract class CommonAPI  extends APIBase implements WebQQAPIInterface{
 		this.initParam(requestGet,getRequestJson());
 		this.setRequestGetString(requestGet.toString()+"&clientid="+user.getClientid()+"&psessionid="+user.getPsessionid());
 		setRequestPostString("r="+getRequestJson().toString()+"&clientid="+user.getClientid()+"&psessionid="+user.getPsessionid());
-	
-		
 		super.process();
 	}
+	
 	public JSONObject getRequestJson() {
 		return requestJson;
 	}
 
 	public void setRequestJson(JSONObject requestJson) {
 		this.requestJson = requestJson;
-	}
-	
-	public JSONObject getResponseJson(){
-		JSONObject json=JSONObject.fromObject(this.getResponseString());
-		return json;
 	}
 
 	@Override

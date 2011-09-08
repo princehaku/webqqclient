@@ -28,7 +28,7 @@ import net.techest.webqq.net.HttpClient.REQ_TYPE;
  * @author haku
  *
  */
-public class PullDataAPI extends CommonAPI{
+public class PullDataAPI extends CommonJsonAPI{
 
 	public PullDataAPI() {
 		this.setRequestType(REQ_TYPE.POST);

@@ -22,23 +22,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
-/**验证码图片
+/**图片
  * 
  * @author princehaku
  *
  */
-public class VerifyImage extends Image implements IFileProcess{
-	/**唯一标识符 一般说来是用户的qq号码
+public class Image implements IFileProcess{
+	protected ImageIcon image;
+	/**原始数据
 	 * 
 	 */
-	private String uin;
-	/**应用的id
-	 * 
-	 */
-	private String aid;
+	protected byte[] content;
 	
-	public VerifyImage(byte[] content){
-			super(content);
+	public Image(byte[] content){
+		this.content=content;
+		this.image=new ImageIcon(content);
 	}
 	
 	/**保存到某个位置
@@ -51,4 +49,13 @@ public class VerifyImage extends Image implements IFileProcess{
 		fops.write(this.content);
 		fops.close();
 	}
+	
+	public ImageIcon getImage(){
+		return this.image;
+	}
+	
+	public byte[] getImageData(){
+		return this.content;
+	}
+
 }
