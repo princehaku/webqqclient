@@ -19,18 +19,18 @@
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
+import net.techest.util.Log4j;
 import net.techest.webqq.bean.WebQQUser;
+import net.techest.webqq.net.HttpClient;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
 
-/**大多数的webqq的api都要求传递cliendid和psessionid
- * 所以这个分离成了基类
- * 直接继承这个类便可以实现
- * 相关参数的可以在initParam里面实现
+/**这个API类代表返回JSON对象的api
+ * 
  * @author haku
  *
  */
-public abstract class CommonJsonAPI  extends APIBase implements WebQQAPIInterface{
+public abstract class CommonJsonAPI  extends APIBase implements WebQQAPIInterface,APICallBack{
 
 	protected WebQQUser user;
 
@@ -59,11 +59,12 @@ public abstract class CommonJsonAPI  extends APIBase implements WebQQAPIInterfac
 	 */
 	abstract public void initParam(QueryParam requestGet,JSONObject requestJson);
 	
-	@Override
+
 	public void init(WebQQUser user) {
 		this.user=user;
-		hc=user.getServerContext().getHttpClient();
-		hc.setRequestProperty("Referer","http://d.web2.qq.com/proxy.html?v=20110331002&callback=2");
+		//这里创建的连接器是服务器会话的拷贝  这样才不会受到线程限制
+		hc=(HttpClient) user.getServerContext().getHttpClient().clone();
+		hc.setRequestProperty("Referer","http://web2.qq.com/");
 		String param="{\"vfwebqq\":\""+user.getVfwebqq()+"\",\"clientid\":\""+user.getClientid()+"\",\"psessionid\":\""+user.getPsessionid()+"\",\"key\":0,\"ids\":[]}";
 		setRequestJson(JSONObject.fromObject(param));
 		//requestData=json;
@@ -72,15 +73,18 @@ public abstract class CommonJsonAPI  extends APIBase implements WebQQAPIInterfac
 	@Override
 	public void process() throws Exception{
 		//在提交前设置参数
-		
 		QueryParam requestGet=new QueryParam();
 		this.initParam(requestGet,getRequestJson());
 		this.setRequestGetString(requestGet.toString()+"&clientid="+user.getClientid()+"&psessionid="+user.getPsessionid());
-		setRequestPostString("r="+getRequestJson().toString()+"&clientid="+user.getClientid()+"&psessionid="+user.getPsessionid());
-	
-		
+		if(getRequestPostString()==null){
+			setRequestPostString("r="+getRequestJson().toString()+"&clientid="+user.getClientid()+"&psessionid="+user.getPsessionid());
+		}else{
+			setRequestPostString(getRequestPostString()+"&r="+getRequestJson().toString()+"&clientid="+user.getClientid()+"&psessionid="+user.getPsessionid());
+		}
 		super.process();
+		Log4j.getInstance().debug("Response : " + responseString);
 	}
+	
 	public JSONObject getRequestJson() {
 		return requestJson;
 	}

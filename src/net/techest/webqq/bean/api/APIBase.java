@@ -22,7 +22,12 @@ import net.techest.util.Log4j;
 import net.techest.webqq.net.HttpClient;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 
-public abstract class APIBase implements Cloneable,APICallBack{
+/**API基类 所有的API必须 继承自它
+ * 
+ * @author princehaku
+ *
+ */
+public abstract class APIBase implements Cloneable{
 	/**构造函数
 	 * 
 	 * 
@@ -103,16 +108,18 @@ public abstract class APIBase implements Cloneable,APICallBack{
 		Log4j.getInstance().debug("Request : " + toString());
 		content=this.hc.exec();
 		responseString=new String(content);
-		Log4j.getInstance().debug("Response : " + responseString);
+		//Log4j.getInstance().debug("Response : " + responseString);
 		this.callback();
 	}
 	
 	public  String toString() {
 		return "\nGET: "+this.getRequestGetString()+
-				"\nPOST:"+this.getRequestPostString()+
-				"\n Response : "+this.getResponseString();
+				"\nPOST:"+this.getRequestPostString();
 	}
-	
+
+    /**回调函数
+     *
+     */
 	abstract public void callback();
 
 	public String getRequestPostString() {

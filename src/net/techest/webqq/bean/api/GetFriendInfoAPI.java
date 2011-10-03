@@ -19,8 +19,8 @@
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
-import net.techest.webqq.net.QueryParam;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
+import net.techest.webqq.net.QueryParam;
 
 /**得到好友的资料
  * 也可以得到自己的 

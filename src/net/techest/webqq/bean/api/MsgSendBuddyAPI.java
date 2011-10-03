@@ -19,8 +19,8 @@
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
-import net.techest.webqq.net.QueryParam;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
+import net.techest.webqq.net.QueryParam;
 
 /**消息发送API
  * 
@@ -32,7 +32,7 @@ public class MsgSendBuddyAPI extends CommonJsonAPI{
 	
 	private String txt;
 	
-	private long toWhom;
+	private String toWhom;
 	
 	public MsgSendBuddyAPI(){
 		this.setRequestType(REQ_TYPE.POST);
@@ -44,13 +44,15 @@ public class MsgSendBuddyAPI extends CommonJsonAPI{
 		JSONObject newj=JSONObject.fromObject("{\"to\":"+this.getToWhom()+",\"face\":564,\"content\":\"[\\\""+this.getTxt()+"\\\"]\",\"msg_id\":123123123}");
 		newj.put("clientid", json.get("clientid"));
 		newj.put("psessionid", json.get("psessionid"));
+		//TODO:bug 无法发送消息
+		setRequestPostString(newj.toString());
 	}
 
-	public long getToWhom() {
+	public String getToWhom() {
 		return toWhom;
 	}
 
-	public void setToWhom(long toWhom) {
+	public void setToWhom(String toWhom) {
 		this.toWhom = toWhom;
 	}
 

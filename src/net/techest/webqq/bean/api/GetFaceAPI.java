@@ -20,8 +20,8 @@ package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
 import net.techest.webqq.bean.Image;
-import net.techest.webqq.net.QueryParam;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
+import net.techest.webqq.net.QueryParam;
 
 /**获取头像
  * 

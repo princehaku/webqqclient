@@ -20,8 +20,6 @@ package net.techest.webqq.bean;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import javax.swing.ImageIcon;
 /**验证码图片
  * 
  * @author princehaku

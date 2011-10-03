@@ -36,7 +36,8 @@ public abstract class APIFacroty {
 	 */
 	public APIBase getApiByName(String name) throws Exception{
 		APIBase api=apis.get(name);
-		return api.getClass().newInstance();
+		APIBase newApi=api.getClass().newInstance();
+		return newApi;
 	}
 	
 	public void registerApi(APIBase api){

@@ -18,13 +18,6 @@
 
 package net.techest.webqq.action;
 
-import java.io.FileReader;
-import java.net.URLEncoder;
-
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-
 import net.techest.util.Log4j;
 import net.techest.util.StringTools;
 import net.techest.webqq.bean.VerifyImage;
@@ -34,11 +27,18 @@ import net.techest.webqq.sso.AbstractLoginAction;
 import net.techest.webqq.sso.Action;
 import net.techest.webqq.sso.LoginStatu;
 import net.techest.webqq.sso.SSOConfig;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URLEncoder;
 
 /**通过SSO登录
  * 
@@ -112,8 +112,16 @@ public class SSOLoginAction extends AbstractLoginAction implements Action{
 	 */
 	public void loginVerify(String verifyCode) throws Exception {
 		loginparam.put("u", this.getUser().getUin());
-		ScriptEngine se = new ScriptEngineManager().getEngineByName("javascript"); 
-		se.eval(new FileReader("res/common.js"));
+		ScriptEngine se = new ScriptEngineManager().getEngineByName("javascript");
+        InputStream fin=SSOLoginAction.class.getResourceAsStream("common.js");
+        BufferedReader br=new BufferedReader(new InputStreamReader(fin));
+        String line="";
+        StringBuffer sb=new StringBuffer();
+        while((line=br.readLine())!=null){
+            sb.append(line);
+            sb.append("\n");
+        }
+		se.eval(sb.toString());
     	Invocable in=(Invocable)se; 
 		String p= (String)( in.invokeFunction("encrypt", this.getUser().getPassword(),verifyCode));
 		
@@ -210,12 +218,12 @@ public class SSOLoginAction extends AbstractLoginAction implements Action{
 		this.loginStatu=LoginStatu.INIT_DONE;
 		Log4j.getInstance().debug(this.getUser().toString()+"   初始化完成");
 	}
-	
-	@Override
+
+
 	public void callBack() {
 		//nothing!
 	}
-	
+
 	
 
 }

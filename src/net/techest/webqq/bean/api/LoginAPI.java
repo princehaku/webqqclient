@@ -19,12 +19,11 @@
 package net.techest.webqq.bean.api;
 
 
-import org.springframework.stereotype.Component;
-
 import net.sf.json.JSONObject;
 import net.techest.webqq.bean.WebQQUser;
 import net.techest.webqq.client.OnlineStatu;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
+import org.springframework.stereotype.Component;
 
 /**登录的api
  * 这个和其他的api不同

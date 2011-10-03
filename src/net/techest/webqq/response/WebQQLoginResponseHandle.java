@@ -18,19 +18,16 @@
 
 package net.techest.webqq.response;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import net.techest.util.Log4j;
 import net.techest.webqq.bean.api.APIBase;
-import net.techest.webqq.bean.api.ChangeStatuAPI;
 import net.techest.webqq.bean.api.GetFaceAPI;
-import net.techest.webqq.bean.api.GetFriendInfoAPI;
-import net.techest.webqq.client.OnlineStatu;
 import net.techest.webqq.client.dialog.ServerDialog;
 import net.techest.webqq.sso.AbstractLoginAction;
 import net.techest.webqq.sso.LoginStatu;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class WebQQLoginResponseHandle implements AbstractResponseHandle {
 

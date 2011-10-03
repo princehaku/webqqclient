@@ -18,11 +18,11 @@
 
 package net.techest.webqq.client;
 
-import java.util.HashMap;
-
 import net.techest.util.Log4j;
 import net.techest.webqq.bean.QQUser;
 import net.techest.webqq.client.dialog.ServerDialog;
+
+import java.util.HashMap;
 
 /**用户运行池
  * 负责维护多个用户的运行

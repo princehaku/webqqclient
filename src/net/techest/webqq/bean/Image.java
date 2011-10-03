@@ -18,11 +18,10 @@
 
 package net.techest.webqq.bean;
 
+import javax.swing.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import javax.swing.ImageIcon;
-/**图片
+/**图片类
  * 
  * @author princehaku
  *
@@ -33,12 +32,23 @@ public class Image implements IFileProcess{
 	 * 
 	 */
 	protected byte[] content;
-	
+	/**通过字节流构造一个图片
+	 * 
+	 * @param content
+	 */
 	public Image(byte[] content){
 		this.content=content;
 		this.image=new ImageIcon(content);
 	}
-	
+	/**使用一个imageIcon来构造图片
+	 * 注意不能保存 因为 byte[]没有转换
+	 * @param imageIcon
+	 */
+	public Image(ImageIcon imageIcon) {
+		this.content=new byte[1];
+		this.image=imageIcon;
+	}
+
 	/**保存到某个位置
 	 * 
 	 * @param path

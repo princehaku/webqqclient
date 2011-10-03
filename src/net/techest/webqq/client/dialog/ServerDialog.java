@@ -18,9 +18,6 @@
 
 package net.techest.webqq.client.dialog;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import net.techest.util.Log4j;
 import net.techest.webqq.WebQQSystem;
 import net.techest.webqq.action.ActionException;
@@ -29,11 +26,9 @@ import net.techest.webqq.action.WebQQLoginAction;
 import net.techest.webqq.bean.QQUser;
 import net.techest.webqq.bean.WebQQUser;
 import net.techest.webqq.bean.api.APIBase;
-import net.techest.webqq.bean.api.GetFaceAPI;
 import net.techest.webqq.bean.api.WEBQQAPIFacroty;
 import net.techest.webqq.bean.api.WebQQAPIInterface;
 import net.techest.webqq.client.MessageQueue;
-import net.techest.webqq.client.MessageReceiver;
 import net.techest.webqq.client.OnlineStatu;
 import net.techest.webqq.net.HttpClient;
 import net.techest.webqq.sso.AbstractLoginAction;
@@ -85,7 +80,6 @@ public class ServerDialog extends Thread {
 		try {
 			//发起验证连接
 			this.userAuth();			
-			int i=0;
 			//如果需要验证码 则等待
 			if(getLoginAction().getStatu().equals(LoginStatu.NEED_VERIFY)){
 				Log4j.getInstance().debug("需要验证码");
@@ -176,6 +170,12 @@ public class ServerDialog extends Thread {
         return InstanceHolder.instance;
     }
 	
+    /**通过sping的工厂得到api
+     * 都是得到一个clone的api对象
+     * 如果不存在会返回空
+     * @param apiName
+     * @return
+     */
 	public APIBase getWebQQAPI(String apiName){
 		APIBase api = null;
 		WEBQQAPIFacroty apifac=(WEBQQAPIFacroty) WebQQSystem.getInstance().getContext().getBean("apifactory");

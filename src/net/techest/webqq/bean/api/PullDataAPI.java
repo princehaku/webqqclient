@@ -20,8 +20,8 @@ package net.techest.webqq.bean.api;
 
 
 import net.sf.json.JSONObject;
-import net.techest.webqq.net.QueryParam;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
+import net.techest.webqq.net.QueryParam;
 
 /**从服务器拉取消息
  * 

@@ -1,55 +1,58 @@
+
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 <!-- 使用spring对api进行构造  方便进行api的更新 限制 修改-->
 
-<bean id="apilogin" class="net.techest.webqq.bean.api.LoginAPI"/>
-<bean id="apigetfriends" class="net.techest.webqq.bean.api.GetFriendsAPI"/>
-<bean id="apimsgpull" class="net.techest.webqq.bean.api.PullDataAPI"/>
-<bean id="apigetonlinefriends" class="net.techest.webqq.bean.api.GetOnlineFriendsAPI"/>
-<bean id="apigetgroups" class="net.techest.webqq.bean.api.GetGroupsAPI"/>
-<bean id="apisendmsgbuddy" class="net.techest.webqq.bean.api.MsgSendBuddyAPI"/>
-<bean id="apichangestatu" class="net.techest.webqq.bean.api.ChangeStatuAPI"/>
-<bean id="apigetfriendinfo" class="net.techest.webqq.bean.api.GetFriendInfoAPI"/>
-<bean id="apigetface" class="net.techest.webqq.bean.api.GetFaceAPI"/>
-
-
+    <bean id="apilogin" class="net.techest.webqq.bean.api.LoginAPI" />
+    <bean id="apigetfriends" class="net.techest.webqq.bean.api.GetFriendsAPI"/>
+    <bean id="apimsgpull" class="net.techest.webqq.bean.api.PullDataAPI"/>
+    <bean id="apigetonlinefriends" class="net.techest.webqq.bean.api.GetOnlineFriendsAPI"/>
+    <bean id="apigetgroups" class="net.techest.webqq.bean.api.GetGroupsAPI"/>
+    <bean id="apisendmsgbuddy" class="net.techest.webqq.bean.api.MsgSendBuddyAPI"/>
+    <bean id="apichangestatu" class="net.techest.webqq.bean.api.ChangeStatuAPI"/>
+    <bean id="apigetfriendinfo" class="net.techest.webqq.bean.api.GetFriendInfoAPI"/>
+    <bean id="apigetfriendlnick" class="net.techest.webqq.bean.api.GetFriendLNickAPI"/>
+    <bean id="apigetface" class="net.techest.webqq.bean.api.GetFaceAPI"/>
 
 <!--对API工厂的定义-->
-<bean id="apifactory" class="net.techest.webqq.bean.api.WEBQQAPIFacroty">
-	<property name="apis">
-      <map>
-        <entry key="webqq_login">
-        		<ref local="apilogin"/>
-        </entry>
-        <entry key="webqq_pulldata">
-        		<ref local="apimsgpull"/>
-        </entry>
-        <entry key="webqq_get_friends">
-        		<ref local="apigetfriends"/>
-        </entry>
-        <entry key="webqq_get_online_friends">
-        		<ref local="apigetonlinefriends"/>
-        </entry>
-        <entry key="webqq_get_groups">
-        		<ref local="apigetgroups"/>
-        </entry>
-        <entry key="webqq_send_msg_buddy">
-        		<ref local="apisendmsgbuddy"/>
-        </entry>
-        <entry key="webqq_change_statu">
-        		<ref local="apichangestatu"/>
-        </entry>
-        <entry key="webqq_get_friend_info">
-        		<ref local="apigetfriendinfo"/>
-        </entry>
-        <entry key="webqq_get_face">
-        		<ref local="apigetface"/>
-        </entry>
+    <bean id="apifactory" class="net.techest.webqq.bean.api.WEBQQAPIFacroty">
+        <property name="apis">
+            <map>
+                <entry key="webqq_login">
+                    <ref local="apilogin"/>
+                </entry>
+                <entry key="webqq_pulldata">
+                    <ref local="apimsgpull"/>
+                </entry>
+                <entry key="webqq_get_friends">
+                    <ref local="apigetfriends"/>
+                </entry>
+                <entry key="webqq_get_online_friends">
+                    <ref local="apigetonlinefriends"/>
+                </entry>
+                <entry key="webqq_get_groups">
+                    <ref local="apigetgroups"/>
+                </entry>
+                <entry key="webqq_send_msg_buddy">
+                    <ref local="apisendmsgbuddy"/>
+                </entry>
+                <entry key="webqq_change_statu">
+                    <ref local="apichangestatu"/>
+                </entry>
+                <entry key="webqq_get_friend_info">
+                    <ref local="apigetfriendinfo"/>
+                </entry>
+                <entry key="webqq_get_friend_lnick">
+                    <ref local="apigetfriendlnick"/>
+                </entry>
+                <entry key="webqq_get_face">
+                    <ref local="apigetface"/>
+                </entry>
         
         
-      </map>
-    </property>
-</bean>
+            </map>
+        </property>
+    </bean>
 
 
 

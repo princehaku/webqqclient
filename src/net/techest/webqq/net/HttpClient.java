@@ -17,6 +17,8 @@
  */
 package net.techest.webqq.net;
 
+import net.techest.util.Log4j;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
@@ -28,10 +30,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.techest.util.Log4j;
-
 /**
  * HTTP连接类 带cookie 可以使用GET和POST
+ * 注意: 非线程安全
  * 
  * @author princehaku
  */

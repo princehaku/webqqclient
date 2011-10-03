@@ -16,7 +16,6 @@
  *  Author     : princehaku
  */
 package test;
-import java.io.IOException;
 
 import net.sf.json.JSONObject;
 import net.techest.webqq.action.WebQQLoginAction;
@@ -24,6 +23,8 @@ import net.techest.webqq.bean.QQUser;
 import net.techest.webqq.bean.WebQQUser;
 import net.techest.webqq.client.dialog.ServerDialog;
 import net.techest.webqq.response.WebQQLoginResponseHandle;
+
+import java.io.IOException;
 
 
 public class TestQQ {
@@ -34,7 +35,7 @@ public class TestQQ {
 	 */
 	public static void main(String[] args) throws IOException {
 		QQUser u=new WebQQUser();
-		u.setUin("3189663316");
+		u.setUin("389663316");
 		u.setPassword("!52dearesta3");
 		//打开一个新的服务器会话
 		ServerDialog sd=new ServerDialog(u);
