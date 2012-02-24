@@ -132,10 +132,10 @@ public class SSOLoginAction extends AbstractLoginAction implements Action{
 
 		hc.setUrl("http://ptlogin2.qq.com/login?"+loginparam.toString());
 	    byte[] content=hc.exec();
-		String res=new String(content);
+		String res=new String(content,"utf8");
 		Log4j.getInstance().debug("LOGIN_RETURN : "+res);
 		
-		this.loginStatu=LoginStatu.LOGIN_TIMEOUT;
+		this.loginStatu=LoginStatu.CONNECT_ERROR;
 		
 		if(res.indexOf("成功")>0){
 			this.loginStatu=LoginStatu.SUCCESS;
@@ -169,7 +169,7 @@ public class SSOLoginAction extends AbstractLoginAction implements Action{
 			Log4j.getInstance().error("连接错误"+e.getMessage());
 			throw e;
 		}
-		String res=new String(content);
+		String res=new String(content,"utf8");
 		Log4j.getInstance().debug("VC_RETURN : "+res);
 		String vckey=StringTools.findMc(res, "VC\\('(.*?)'", 1);
 		String vcvalue=StringTools.findMc(res, ",'(.*?)'\\)", 1);
@@ -206,7 +206,7 @@ public class SSOLoginAction extends AbstractLoginAction implements Action{
 			throw e;
 		}
 		
-		Document doc = Jsoup.parse(new String(content));
+		Document doc = Jsoup.parse(new String(content,"utf8"));
 		
 		Elements loginforminputs = doc.select("#loginform input");
 		

@@ -107,13 +107,13 @@ public abstract class APIBase implements Cloneable{
 		}
 		Log4j.getInstance().debug("Request : " + toString());
 		content=this.hc.exec();
-		responseString=new String(content);
+		responseString=new String(content,"utf8");
 		//Log4j.getInstance().debug("Response : " + responseString);
 		this.callback();
 	}
 	
 	public  String toString() {
-		return "\nGET: "+this.getRequestGetString()+
+		return "\nURL: "+ this.requestURI+ "\nGET: "+this.getRequestGetString()+
 				"\nPOST:"+this.getRequestPostString();
 	}
 
