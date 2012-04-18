@@ -28,7 +28,7 @@ public class HttpJsonClient extends HttpClient implements Cloneable{
 	
 
 		public JSONObject getJson() throws Exception{
-			String res=new String(this.exec(),"utf8");
+			String res=new String(this.exec());
 			return JSONObject.fromObject(res);
 		}
 }

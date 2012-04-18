@@ -38,9 +38,6 @@ public class TestLogin {
 
 	public static void main(String argv[]) throws Exception {
 
-		System.out.println("==========webqqclient==========");
-		System.out.println("===           author : princehaku               ==");
-		System.out.println("============================");
 		String qnumber="389663316";
 		String qpasswd="!52dearesta3";
 		System.out.println(SSOConfig.getInstance().getInt("APP_ID"));
@@ -60,7 +57,7 @@ public class TestLogin {
 		System.out.println(param.toString());
 		hc.setUrl("http://ui.ptlogin2.qq.com/cgi-bin/login?"+param.toString());
 		byte[] content=hc.exec();
-		Document doc = Jsoup.parse(new String(content,"utf8"));
+		Document doc = Jsoup.parse(new String(content));
 		
 		Elements loginforminputs = doc.select("#loginform input");
 		QueryParam loginparam=new QueryParam();
@@ -78,7 +75,7 @@ public class TestLogin {
 		fops.write(content);
 		fops.close();
 
-		System.out.print("请输入验证码  在跟目录下面的img.jpg");
+		System.out.print("请输入验证码");
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 		String verCode=br.readLine();
 		
@@ -96,7 +93,7 @@ public class TestLogin {
 		hc.setUrl("http://ptlogin2.qq.com/login?"+loginparam.toString());
 	    content=hc.exec();
 		
-		System.out.print(new String(content,"utf8"));
+		System.out.print(new String(content));
 		
 //		http://ptlogin2.qq.com/login?u=389663316&p=72A430E88E0B073361AE861EC71C3978&verifycode=wdwa&webqq_type=10&remember_uin=1&login2qq=0&aid=1003903&u1=http%3A%2F%2Fweb.qq.com%2Floginproxy.html%3Flogin2qq%3D0%26webqq_type%3D10&h=1&ptredirect=0&ptlang=2052&from_ui=1&pttype=1&dumy=&fp=loginerroralert&action=3-11-8011&mibao_css=
 //		

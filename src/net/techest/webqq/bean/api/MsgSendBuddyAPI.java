@@ -18,52 +18,34 @@
 
 package net.techest.webqq.bean.api;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import net.sf.json.JSONObject;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
 
-/**
- * 消息发送API
+/**消息发送API
  * 
- * 参数 long toWhom 参数 txt
- * 
+ * 参数 long toWhom
+ * 参数 txt
  * @author haku
  */
-public class MsgSendBuddyAPI extends CommonJsonAPI {
-
+public class MsgSendBuddyAPI extends CommonJsonAPI{
+	
 	private String txt;
-
+	
 	private String toWhom;
-
-	public MsgSendBuddyAPI() {
+	
+	public MsgSendBuddyAPI(){
 		this.setRequestType(REQ_TYPE.POST);
 		this.setRequestURI("http://d.web2.qq.com/channel/send_buddy_msg2");
 	}
 
 	@Override
-	public void initParam(QueryParam requestGetParam, JSONObject json) {
-		JSONObject newj;
-		try {
-			newj = JSONObject.fromObject("{\"to\":" + this.getToWhom()
-					+ ",\"face\":564,\"content\":\"[\\\""
-					+ URLEncoder.encode(this.getTxt(), "utf8")
-					+ "\\\"]\",\"msg_id\":123123123}");
-
-			newj.put("clientid", json.get("clientid"));
-			newj.put("psessionid", json.get("psessionid"));
-			// json=newj;
-			setRequestJson(newj);
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		/*
-		 * json.put("to", this.getToWhom()); json.put("msg_id", "123123123");
-		 * json.put("msg_id", "123123123");
-		 */
+	public void initParam(QueryParam requestGetParam,JSONObject json) {
+		JSONObject newj=JSONObject.fromObject("{\"to\":"+this.getToWhom()+",\"face\":564,\"content\":\"[\\\""+this.getTxt()+"\\\"]\",\"msg_id\":123123123}");
+		newj.put("clientid", json.get("clientid"));
+		newj.put("psessionid", json.get("psessionid"));
+		//TODO:bug 无法发送消息
+		setRequestPostString(newj.toString());
 	}
 
 	public String getToWhom() {

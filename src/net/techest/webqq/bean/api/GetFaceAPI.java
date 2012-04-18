@@ -40,7 +40,6 @@ public class GetFaceAPI extends CommonDataAPI{
 	@Override
 	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
 		requestGetParam.put("uin", getUin());
-		this.setRequestTimeout(20000);
 	}
 
 	public String getUin() {

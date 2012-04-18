@@ -52,13 +52,8 @@ public abstract class CommonDataAPI  extends APIBase implements WebQQAPIInterfac
 	 * @param requestJson
 	 */
 	abstract public void initParam(QueryParam requestGet,JSONObject requestJson);
-	/**设置连接超时时间
-	 * 
-	 * @param i
-	 */
-	public void setRequestTimeout(int i) {
-		getHc().setResponseTimeOut(i);
-	}
+	
+
 	public void init(WebQQUser user) {
 		this.user=user;
 		hc=(HttpClient) user.getServerContext().getHttpClient().clone();
