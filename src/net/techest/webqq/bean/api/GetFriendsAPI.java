@@ -15,27 +15,26 @@
  *  Created on : 2011-9-5, 上午11:49:19
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
 
-/**获取好友名单
- * 
+/**
+ * 获取好友名单
+ *
  * @author haku
  *
  */
-public class GetFriendsAPI extends CommonJsonAPI{
-	
-	public GetFriendsAPI(){
-		this.setRequestType(REQ_TYPE.POST);
-		this.setRequestURI("http://s.web2.qq.com/api/get_user_friends2");
-	}
+public class GetFriendsAPI extends CommonJsonAPI {
 
-	@Override
-	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
-		
-	}
+    public GetFriendsAPI() {
+        this.setRequestType(REQ_TYPE.POST);
+        this.setRequestURI("http://s.web2.qq.com/api/get_user_friends2");
+    }
+
+    @Override
+    public void initParam(QueryParam requestGetParam, JSONObject requestJson) {
+    }
 }

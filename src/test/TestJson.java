@@ -21,12 +21,11 @@ import java.io.IOException;
  *  Created on : 2011-9-5, 下午12:50:39
  *  Author     : princehaku
  */
-
 public class TestJson {
 
-	public static void main(String[] args) throws IOException {
-		String res=new String("{\"retcode\":103,\"errmsg\":\"\"}");
-		JSONObject jsonObject = JSONObject.fromObject(res);
-		System.out.println(jsonObject.getString("retcode"));
-	}
+    public static void main(String[] args) throws IOException {
+        String res = new String("{\"retcode\":103,\"errmsg\":\"\"}");
+        JSONObject jsonObject = JSONObject.fromObject(res);
+        System.out.println(jsonObject.getString("retcode"));
+    }
 }

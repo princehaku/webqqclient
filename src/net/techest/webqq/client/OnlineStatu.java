@@ -15,28 +15,33 @@
  *  Created on : 2011-9-5, 上午8:51:59
  *  Author     : princehaku
  */
-
 package net.techest.webqq.client;
 
 public enum OnlineStatu {
-	/**我在线
-	 * 
-	 */
-	ONLINE, 
-	/**忙碌
-	 * 
-	 */
-	BUSY,
-	/**离开
-	 * 
-	 */
-	AWAY,
-	/**隐身
-	 * 
-	 */
-	HIDDEN,
-	/**离线
-	 * 
-	 */
-	OFFLINE
+
+    /**
+     * 我在线
+     *
+     */
+    ONLINE,
+    /**
+     * 忙碌
+     *
+     */
+    BUSY,
+    /**
+     * 离开
+     *
+     */
+    AWAY,
+    /**
+     * 隐身
+     *
+     */
+    HIDDEN,
+    /**
+     * 离线
+     *
+     */
+    OFFLINE
 }

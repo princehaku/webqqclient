@@ -15,20 +15,18 @@
  *  Created on : 2011-9-5, 下午5:07:05
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean.api;
 
-/**webqqapi的工厂
- * 因为使用了spring进行注入
- * 现在这个基本只是一个apifactory的实现
+/**
+ * webqqapi的工厂 因为使用了spring进行注入 现在这个基本只是一个apifactory的实现
+ *
  * @author haku
  *
  */
-public class WEBQQAPIFacroty extends APIFacroty{
+public class WEBQQAPIFacroty extends APIFacroty {
 
-	public WEBQQAPIFacroty(){
-	}
-
+    public WEBQQAPIFacroty() {
+    }
 //    private static class InstanceHolder {
 //
 //        final static WEBQQAPIFacroty instance = new WEBQQAPIFacroty();
@@ -37,5 +35,4 @@ public class WEBQQAPIFacroty extends APIFacroty{
 //	public static WEBQQAPIFacroty getInstance(){
 //		return InstanceHolder.instance;
 //	}
-
 }

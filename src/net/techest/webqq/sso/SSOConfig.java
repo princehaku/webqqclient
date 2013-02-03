@@ -15,22 +15,24 @@
  *  Created on : 2011-9-4, 下午6:18:30
  *  Author     : princehaku
  */
-
 package net.techest.webqq.sso;
 
 import net.techest.util.Configure;
 
-/**SSO登录配置
- * 
+/**
+ * SSO登录配置
+ *
  * @author princehaku
  *
  */
 public class SSOConfig {
-		private static  class instanceHolder{
-			final static Configure instance=new Configure("ssoconfig.properties");
-		}
-		
-		public static Configure getInstance(){
-			return instanceHolder.instance;
-		}
+
+    private static class instanceHolder {
+
+        final static Configure instance = new Configure("ssoconfig.properties");
+    }
+
+    public static Configure getInstance() {
+        return instanceHolder.instance;
+    }
 }

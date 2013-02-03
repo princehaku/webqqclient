@@ -15,7 +15,6 @@
  *  Created on : 2011-9-5, 上午11:49:19
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
@@ -23,38 +22,41 @@ import net.techest.webqq.bean.Image;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
 
-/**获取头像
- * 
+/**
+ * 获取头像
+ *
  * 参数Uin
+ *
  * @author haku
  */
-public class GetFaceAPI extends CommonDataAPI{
-	
-	private String uin;
-	
-	public GetFaceAPI(){
-		this.setRequestType(REQ_TYPE.GET);
-		this.setRequestURI("http://face.qun.qq.com/cgi/svr/face/getface");
-	}
+public class GetFaceAPI extends CommonDataAPI {
 
-	@Override
-	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
-		requestGetParam.put("uin", getUin());
-	}
+    private String uin;
 
-	public String getUin() {
-		return uin;
-	}
+    public GetFaceAPI() {
+        this.setRequestType(REQ_TYPE.GET);
+        this.setRequestURI("http://face.qun.qq.com/cgi/svr/face/getface");
+    }
 
-	public void setUin(String uin) {
-		this.uin = uin;
-	}
-	/**得到响应回的图片
-	 * 
-	 * @return
-	 */
-	public Image getResponseImage(){
-		return new Image(getReturnRawContent());
-	}
-	
+    @Override
+    public void initParam(QueryParam requestGetParam, JSONObject requestJson) {
+        requestGetParam.put("uin", getUin());
+    }
+
+    public String getUin() {
+        return uin;
+    }
+
+    public void setUin(String uin) {
+        this.uin = uin;
+    }
+
+    /**
+     * 得到响应回的图片
+     *
+     * @return
+     */
+    public Image getResponseImage() {
+        return new Image(getReturnRawContent());
+    }
 }

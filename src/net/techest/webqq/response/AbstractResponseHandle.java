@@ -15,11 +15,9 @@
  *  Created on : 2011-9-4, 下午6:29:55
  *  Author     : princehaku
  */
-
 package net.techest.webqq.response;
 
-
-
 public interface AbstractResponseHandle {
-		public void handle(Object obj);
+
+    public void handle(Object obj);
 }

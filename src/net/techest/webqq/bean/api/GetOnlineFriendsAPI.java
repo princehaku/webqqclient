@@ -15,28 +15,26 @@
  *  Created on : 2011-9-5, 上午11:49:19
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
 
-/**获取在线的好友
- * 
+/**
+ * 获取在线的好友
+ *
  * @author haku
  *
  */
-public class GetOnlineFriendsAPI extends CommonJsonAPI{
-	
-	public GetOnlineFriendsAPI(){
-		this.setRequestType(REQ_TYPE.GET);
-		this.setRequestURI("http://d.web2.qq.com/channel/get_online_buddies2");
-	}
+public class GetOnlineFriendsAPI extends CommonJsonAPI {
 
-	@Override
-	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
-		
-	}
-	
+    public GetOnlineFriendsAPI() {
+        this.setRequestType(REQ_TYPE.GET);
+        this.setRequestURI("http://d.web2.qq.com/channel/get_online_buddies2");
+    }
+
+    @Override
+    public void initParam(QueryParam requestGetParam, JSONObject requestJson) {
+    }
 }

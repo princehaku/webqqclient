@@ -26,29 +26,27 @@ import net.techest.webqq.response.WebQQLoginResponseHandle;
 
 import java.io.IOException;
 
-
 public class TestQQ {
 
-	/**
-	 * @param args
-	 * @throws IOException 
-	 */
-	public static void main(String[] args) throws IOException {
-		QQUser u=new WebQQUser();
-		u.setUin("389663316");
-		u.setPassword("!52dearesta3");
-		//打开一个新的服务器会话
-		ServerDialog sd=new ServerDialog(u);
-		sd.setLoginAction(new WebQQLoginAction());
-		//设置登录回调
-		((WebQQLoginAction)sd.getLoginAction()).setResponseHandle(new WebQQLoginResponseHandle(sd));
-		sd.start();
+    /**
+     * @param args
+     * @throws IOException
+     */
+    public static void main(String[] args) throws Exception {
+        QQUser u = new WebQQUser();
+        u.setUin("389663316");
+        u.setPassword("!52dearesta3");
+        //打开一个新的服务器会话
+        ServerDialog sd = new ServerDialog(u);
+        sd.setLoginAction(new WebQQLoginAction());
+        //设置登录回调
+        ((WebQQLoginAction) sd.getLoginAction()).setResponseHandle(new WebQQLoginResponseHandle(sd));
+        sd.start();
 
-		while(1==1){
-			JSONObject rjson= sd.getMessageQueue().pull();
-			System.out.println("消息到来"+rjson);
-		}
-		
-	}
+        while (1 == 1) {
+            JSONObject rjson = sd.getMessageQueue().pull();
+            System.out.println("消息到来" + rjson);
+        }
 
+    }
 }

@@ -15,13 +15,11 @@
  *  Created on : 2011-9-4, 下午10:51:19
  *  Author     : princehaku
  */
-
 package net.techest.webqq.client.dialog;
 
 public class DialogException extends Exception {
 
-	public DialogException(String string) {
-		super(string);
-	}
-
+    public DialogException(String string) {
+        super(string);
+    }
 }

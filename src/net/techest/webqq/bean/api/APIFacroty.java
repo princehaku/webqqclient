@@ -15,44 +15,45 @@
  *  Created on : 2011-9-5, 上午11:57:51
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean.api;
 
 import java.util.HashMap;
 
-/**虚基类
- * API工厂
+/**
+ * 虚基类 API工厂
+ *
  * @author haku
  *
  */
 public abstract class APIFacroty {
-	
-	protected HashMap<String, APIBase> apis=new HashMap<String, APIBase>();
-	/**根据名称得到一个API
-	 * 注意这个api每次得到的都不一样
-	 * 都是从注册的池里面的新的实例
-	 * @param name
-	 * @return
-	 */
-	public APIBase getApiByName(String name) throws Exception{
-		APIBase api=apis.get(name);
-		APIBase newApi=api.getClass().newInstance();
-		return newApi;
-	}
-	
-	public void registerApi(APIBase api){
-		apis.put(api.getApiName(), api);
-	}
-	
-	public void setApis(HashMap<String, APIBase> apis){
-		this.apis=apis;
-	}
-	
-	public void removeApi(APIBase api){
-		apis.remove(api.getApiName());
-	}
-	
-	public void removeApiByName(String name){
-		apis.remove(name);
-	}
+
+    protected HashMap<String, APIBase> apis = new HashMap<String, APIBase>();
+
+    /**
+     * 根据名称得到一个API 注意这个api每次得到的都不一样 都是从注册的池里面的新的实例
+     *
+     * @param name
+     * @return
+     */
+    public APIBase getApiByName(String name) throws Exception {
+        APIBase api = apis.get(name);
+        APIBase newApi = api.getClass().newInstance();
+        return newApi;
+    }
+
+    public void registerApi(APIBase api) {
+        apis.put(api.getApiName(), api);
+    }
+
+    public void setApis(HashMap<String, APIBase> apis) {
+        this.apis = apis;
+    }
+
+    public void removeApi(APIBase api) {
+        apis.remove(api.getApiName());
+    }
+
+    public void removeApiByName(String name) {
+        apis.remove(name);
+    }
 }

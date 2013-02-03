@@ -15,38 +15,43 @@
  *  Created on : 2011-9-4, 下午6:03:40
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-/**验证码图片
- * 
+
+/**
+ * 验证码图片
+ *
  * @author princehaku
  *
  */
-public class VerifyImage extends Image implements IFileProcess{
-	/**唯一标识符 一般说来是用户的qq号码
-	 * 
-	 */
-	private String uin;
-	/**应用的id
-	 * 
-	 */
-	private String aid;
-	
-	public VerifyImage(byte[] content){
-			super(content);
-	}
-	
-	/**保存到某个位置
-	 * 
-	 * @param path
-	 * @throws IOException
-	 */
-	public void saveTo(String path) throws IOException{
-		FileOutputStream fops = new FileOutputStream(path); 
-		fops.write(this.content);
-		fops.close();
-	}
+public class VerifyImage extends Image implements IFileProcess {
+
+    /**
+     * 唯一标识符 一般说来是用户的qq号码
+     *
+     */
+    private String uin;
+    /**
+     * 应用的id
+     *
+     */
+    private String aid;
+
+    public VerifyImage(byte[] content) {
+        super(content);
+    }
+
+    /**
+     * 保存到某个位置
+     *
+     * @param path
+     * @throws IOException
+     */
+    public void saveTo(String path) throws IOException {
+        FileOutputStream fops = new FileOutputStream(path);
+        fops.write(this.content);
+        fops.close();
+    }
 }

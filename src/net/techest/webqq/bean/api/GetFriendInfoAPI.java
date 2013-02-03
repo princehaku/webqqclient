@@ -15,39 +15,39 @@
  *  Created on : 2011-9-5, 上午11:49:19
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
 
-/**得到好友的资料
- * 也可以得到自己的 
- * 
+/**
+ * 得到好友的资料 也可以得到自己的
+ *
  * 参数Uin
+ *
  * @author haku
  *
  */
-public class GetFriendInfoAPI extends CommonJsonAPI{
-	
-	private String uin;
-	
-	public GetFriendInfoAPI(){
-		this.setRequestType(REQ_TYPE.POST);
-		this.setRequestURI("http://s.web2.qq.com/api/get_friend_info2");
-	}
+public class GetFriendInfoAPI extends CommonJsonAPI {
 
-	@Override
-	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
-		requestGetParam.put("tuin", getUin());
-	}
+    private String uin;
 
-	public String getUin() {
-		return uin;
-	}
+    public GetFriendInfoAPI() {
+        this.setRequestType(REQ_TYPE.POST);
+        this.setRequestURI("http://s.web2.qq.com/api/get_friend_info2");
+    }
 
-	public void setUin(String uin) {
-		this.uin = uin;
-	}
+    @Override
+    public void initParam(QueryParam requestGetParam, JSONObject requestJson) {
+        requestGetParam.put("tuin", getUin());
+    }
+
+    public String getUin() {
+        return uin;
+    }
+
+    public void setUin(String uin) {
+        this.uin = uin;
+    }
 }

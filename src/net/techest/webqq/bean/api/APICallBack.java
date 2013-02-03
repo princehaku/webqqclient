@@ -15,13 +15,13 @@
  *  Created on : 2011-9-5, 下午5:25:04
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean.api;
 
 public interface APICallBack {
-	/**执行API完毕后的自身的回调
-	 * 
-	 */
-	public void callback();
 
+    /**
+     * 执行API完毕后的自身的回调
+     *
+     */
+    public void callback();
 }

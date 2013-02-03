@@ -27,32 +27,37 @@ import java.util.regex.Pattern;
  */
 public class StringTools {
 
-    /**正则匹配,返回模式串里面第pos个模式匹配的字符串
+    /**
+     * 正则匹配,返回模式串里面第pos个模式匹配的字符串
      *
      * @param SourceString
      * @param RegxString
      * @param pos
      * @return
      */
-    public static String findMc(String SourceString,String RegxString,int pos){
-            Pattern pn=Pattern.compile(RegxString);
-            Matcher mc=pn.matcher(SourceString);
-            if(mc.find())
-                return mc.group(pos);
-            return "";
+    public static String findMc(String SourceString, String RegxString, int pos) {
+        Pattern pn = Pattern.compile(RegxString);
+        Matcher mc = pn.matcher(SourceString);
+        if (mc.find()) {
+            return mc.group(pos);
+        }
+        return "";
     }
-    /**字符串前补0
+
+    /**
+     * 字符串前补0
      *
      */
-    public static String plusZero(String s,int length)
-    {
-        if(s.length()<length)
-            return "0"+plusZero(s,length-1);
-        else
+    public static String plusZero(String s, int length) {
+        if (s.length() < length) {
+            return "0" + plusZero(s, length - 1);
+        } else {
             return s;
+        }
     }
-    
-    /**将字节转换成字符串
+
+    /**
+     * 将字节转换成字符串
      *
      * @param source
      * @param encode 编码
@@ -70,6 +75,7 @@ public class StringTools {
 
     /**
      * 用来截取两个字符串包含中间的字符串
+     *
      * @param source
      * @param st
      * @param ed
@@ -90,35 +96,39 @@ public class StringTools {
 
     }
 
-    /**最小长度切割字符串
+    /**
+     * 最小长度切割字符串
      *
      * @param source
      * @param length
      * @return
      */
-    public static String subMinStr(String source,int st, int length) {
-        if (source.length() > st+length) {
-            return source.substring(st, st+length);
+    public static String subMinStr(String source, int st, int length) {
+        if (source.length() > st + length) {
+            return source.substring(st, st + length);
         } else {
             return source;
         }
     }
 
-    /**反向过滤html字符
+    /**
+     * 反向过滤html字符
      *
      * @param s
      * @return
      */
     public static String reverseEscapeHTML(String s) {
-        s = s.replaceAll("&amp;","&");
-        s = s.replaceAll("&lt;","<");
-        s = s.replaceAll("&gt;",">");
-        s = s.replaceAll("&quot;","\"");
-        s = s.replaceAll("&apos;","'");
-        s = s.replaceAll("&nbsp;"," ");
+        s = s.replaceAll("&amp;", "&");
+        s = s.replaceAll("&lt;", "<");
+        s = s.replaceAll("&gt;", ">");
+        s = s.replaceAll("&quot;", "\"");
+        s = s.replaceAll("&apos;", "'");
+        s = s.replaceAll("&nbsp;", " ");
         return s;
     }
-    /**去掉html里面的的标签
+
+    /**
+     * 去掉html里面的的标签
      *
      * @param content
      * @return
@@ -126,23 +136,24 @@ public class StringTools {
     public static String removeHTMLtags(String content) {
         //去掉/head以前的所有内容
         String value = null;
-        int end=content.indexOf("</head>");
-        if(end>9)content=content.substring(end+7,content.length());
-        
+        int end = content.indexOf("</head>");
+        if (end > 9) {
+            content = content.substring(end + 7, content.length());
+        }
+
         //去掉所有的标签
         Pattern p = Pattern.compile("(<[^>]*?>)");
-        Matcher m =p.matcher(content);
+        Matcher m = p.matcher(content);
         while (m.find()) {
             value = m.group(0);
             content = content.replace(value, "");
         }
 
         //缩减连续的空格
-        content=content.replaceAll("\\s*|\t|\r|\n","");
+        content = content.replaceAll("\\s*|\t|\r|\n", "");
         //缩减特殊字符串
-        content=reverseEscapeHTML(content);
+        content = reverseEscapeHTML(content);
 
         return content;
     }
- 
 }

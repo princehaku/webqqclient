@@ -15,38 +15,37 @@
  *  Created on : 2011-8-31, 下午6:41:28
  *  Author     : princehaku
  */
-
 package net.techest.webqq.net;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-/**参数类
- * 方便吧参数组合成字符串
- * warning  没有经过urlencode
+/**
+ * 参数类 方便吧参数组合成字符串 warning 没有经过urlencode
+ *
  * @author princehaku
  *
  */
 public class QueryParam extends HashMap<String, String> {
 
-	@Override
-	public java.lang.String toString() {
-		Iterator<Entry<String, String>> ir = this.entrySet().iterator();
-		StringBuilder sb = new StringBuilder();
-		while (ir.hasNext()) {
-			Entry<String, String> obj = ir.next();
-			sb.append(obj.getKey());
-			sb.append("=");
-			sb.append(obj.getValue());
-			if (ir.hasNext()) {
-				sb.append("&");
-			}
-		}
-		return sb.toString();
-	}
+    @Override
+    public java.lang.String toString() {
+        Iterator<Entry<String, String>> ir = this.entrySet().iterator();
+        StringBuilder sb = new StringBuilder();
+        while (ir.hasNext()) {
+            Entry<String, String> obj = ir.next();
+            sb.append(obj.getKey());
+            sb.append("=");
+            sb.append(obj.getValue());
+            if (ir.hasNext()) {
+                sb.append("&");
+            }
+        }
+        return sb.toString();
+    }
 
-	public Iterator<Entry<String, String>> getIterator() {
-		return this.entrySet().iterator();
-	}
+    public Iterator<Entry<String, String>> getIterator() {
+        return this.entrySet().iterator();
+    }
 }

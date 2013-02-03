@@ -15,16 +15,17 @@
  *  Created on : 2011-9-4, 下午6:07:27
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean;
 
 import java.io.IOException;
 
-/**文件处理接口
- * 
+/**
+ * 文件处理接口
+ *
  * @author princehaku
  *
  */
 public interface IFileProcess {
-	public void saveTo(String path) throws IOException;
+
+    public void saveTo(String path) throws IOException;
 }

@@ -15,7 +15,6 @@
  *  Created on : 2011-9-5, 上午9:09:16
  *  Author     : princehaku
  */
-
 package net.techest.webqq.response;
 
 import net.techest.util.Log4j;
@@ -31,44 +30,33 @@ import java.io.InputStreamReader;
 
 public class WebQQLoginResponseHandle implements AbstractResponseHandle {
 
-	private ServerDialog sd;
-	
-	public WebQQLoginResponseHandle(ServerDialog sd) {
-		this.sd=sd;
-	}
+    private ServerDialog sd;
 
-	@Override
-	public void handle(Object obj) {
+    public WebQQLoginResponseHandle(ServerDialog sd) {
+        this.sd = sd;
+    }
 
-		AbstractLoginAction loginAction =(AbstractLoginAction) obj;
-		
-		if(loginAction.getStatu().equals(LoginStatu.NEED_VERIFY)){
-			Log4j.getInstance().debug("请输入验证码");
-			try {
-				loginAction.getVerifyImage().saveTo("img.jpg");
-			} catch (IOException e1) {
-				e1.printStackTrace();
-				Log4j.getInstance().error("写入验证码错误");
-			}
-			BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-			try {
-				sd.inputVerify(br.readLine());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		APIBase api=this.sd.getWebQQAPI("webqq_get_face");
-		try {
-			((GetFaceAPI)api).setUin(loginAction.getUser().getUin());
-			api.process();
-			System.out.println("服务器返回"+api.getResponseString());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+    @Override
+    public void handle(Object obj) {
 
+        AbstractLoginAction loginAction = (AbstractLoginAction) obj;
+
+        if (loginAction.getStatu().equals(LoginStatu.NEED_VERIFY)) {
+            Log4j.getInstance().debug("请输入验证码");
+            try {
+                loginAction.getVerifyImage().saveTo("img.jpg");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+                Log4j.getInstance().error("写入验证码错误");
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            try {
+                sd.inputVerify(br.readLine());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+    }
 }

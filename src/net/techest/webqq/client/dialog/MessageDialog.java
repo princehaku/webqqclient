@@ -15,14 +15,13 @@
  *  Created on : 2011-9-5, 上午9:16:26
  *  Author     : princehaku
  */
-
 package net.techest.webqq.client.dialog;
 
-/**消息会话类
- * 
+/**
+ * 消息会话类
+ *
  * @author princehaku
  *
  */
 public class MessageDialog extends Thread {
-
 }

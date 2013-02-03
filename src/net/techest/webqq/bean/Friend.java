@@ -22,5 +22,4 @@ package net.techest.webqq.bean;
  * @author haku
  */
 public class Friend {
-    
 }

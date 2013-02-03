@@ -15,9 +15,7 @@
  *  Created on : 2011-9-6, 下午2:15:43
  *  Author     : princehaku
  */
-
 package net.techest.webqq.action;
 
 public class KeepLiveAction {
-
 }

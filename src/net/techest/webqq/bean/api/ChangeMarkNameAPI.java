@@ -15,49 +15,47 @@
  *  Created on : 2011-9-5, 上午11:49:19
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
 
-/**获取头像
- * 
- * 参数Uin  MarkName
+/**
+ * 获取头像
+ *
+ * 参数Uin MarkName
+ *
  * @author haku
  */
-public class ChangeMarkNameAPI extends CommonJsonAPI{
-	
-	private String uin;
-	
-	private String markName;
+public class ChangeMarkNameAPI extends CommonJsonAPI {
 
-	public ChangeMarkNameAPI(){
-		this.setRequestType(REQ_TYPE.POST);
-		this.setRequestURI("http://s.web2.qq.com/api/change_mark_name2");
-	}
+    private String uin;
+    private String markName;
 
-	@Override
-	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
-		setRequestPostString("tuin="+this.getUin()+"&markname="+this.getMarkName());
-	}
+    public ChangeMarkNameAPI() {
+        this.setRequestType(REQ_TYPE.POST);
+        this.setRequestURI("http://s.web2.qq.com/api/change_mark_name2");
+    }
 
-	
-	public String getMarkName() {
-		return markName;
-	}
+    @Override
+    public void initParam(QueryParam requestGetParam, JSONObject requestJson) {
+        setRequestPostString("tuin=" + this.getUin() + "&markname=" + this.getMarkName());
+    }
 
-	public void setMarkName(String markName) {
-		this.markName = markName;
-	}
-	
-	public String getUin() {
-		return uin;
-	}
+    public String getMarkName() {
+        return markName;
+    }
 
-	public void setUin(String uin) {
-		this.uin = uin;
-	}
-	
+    public void setMarkName(String markName) {
+        this.markName = markName;
+    }
+
+    public String getUin() {
+        return uin;
+    }
+
+    public void setUin(String uin) {
+        this.uin = uin;
+    }
 }

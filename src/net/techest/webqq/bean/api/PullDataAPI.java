@@ -15,28 +15,27 @@
  *  Created on : 2011-9-5, 下午12:14:47
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean.api;
-
 
 import net.sf.json.JSONObject;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
 
-/**从服务器拉取消息
- * 
+/**
+ * 从服务器拉取消息
+ *
  * @author haku
  *
  */
-public class PullDataAPI extends CommonJsonAPI{
+public class PullDataAPI extends CommonJsonAPI {
 
-	public PullDataAPI() {
-		this.setRequestType(REQ_TYPE.POST);
-		this.setRequestURI("http://d.web2.qq.com/channel/poll2");
-	}
+    public PullDataAPI() {
+        this.setRequestType(REQ_TYPE.POST);
+        this.setRequestURI("http://d.web2.qq.com/channel/poll2");
+    }
 
-	@Override
-	public void initParam(QueryParam requestGetParam,JSONObject requestJson) {
-		this.getHc().setResponseTimeOut(120000);
-	}
+    @Override
+    public void initParam(QueryParam requestGetParam, JSONObject requestJson) {
+        this.getHc().setResponseTimeOut(120000);
+    }
 }

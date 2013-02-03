@@ -15,7 +15,6 @@
  *  Created on : 2011-9-5, 下午10:33:56
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
@@ -24,71 +23,71 @@ import net.techest.webqq.net.HttpClient;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
 
-/**这个API类代表返回数据类型的api
- * 比如获取头像等 返回的是数据
+/**
+ * 这个API类代表返回数据类型的api 比如获取头像等 返回的是数据
+ *
  * @author haku
  *
  */
-public abstract class CommonDataAPI  extends APIBase implements WebQQAPIInterface,APICallBack{
+public abstract class CommonDataAPI extends APIBase implements WebQQAPIInterface, APICallBack {
 
-	protected WebQQUser user;
+    protected WebQQUser user;
+    /**
+     * 请求的json
+     *
+     */
+    protected JSONObject requestJson;
 
-	/**请求的json
-	 * 
-	 */
-	protected JSONObject requestJson;
-	
-	public CommonDataAPI(){
-		this.setRequestType(REQ_TYPE.POST);
-	}
-	
-	public CommonDataAPI(String apiName){
-		super(apiName);
-		this.setRequestType(REQ_TYPE.POST);
-	}
-	/**第一个参数是get上面的
-	 * 第二个参数是post的json的r部分
-	 * @param requestGet
-	 * @param requestJson
-	 */
-	abstract public void initParam(QueryParam requestGet,JSONObject requestJson);
-	
+    public CommonDataAPI() {
+        this.setRequestType(REQ_TYPE.POST);
+    }
 
-	public void init(WebQQUser user) {
-		this.user=user;
-		hc=(HttpClient) user.getServerContext().getHttpClient().clone();
-		hc.setRequestProperty("Referer","http://web2.qq.com/");
-		String param="{\"vfwebqq\":\""+user.getVfwebqq()+"\",\"clientid\":\""+user.getClientid()+"\",\"psessionid\":\""+user.getPsessionid()+"\",\"key\":0,\"ids\":[]}";
-		setRequestJson(JSONObject.fromObject(param));
-		//requestData=json;
-	}
-	
-	@Override
-	public void process() throws Exception{
-		//在提交前设置参数
-		QueryParam requestGet=new QueryParam();
-		this.initParam(requestGet,getRequestJson());
-		this.setRequestGetString(requestGet.toString()+"&clientid="+user.getClientid()+"&psessionid="+user.getPsessionid());
-		if(getRequestPostString()==null){
-			setRequestPostString("r="+getRequestJson().toString()+"&clientid="+user.getClientid()+"&psessionid="+user.getPsessionid());
-		}else{
-			setRequestPostString(getRequestPostString()+"&r="+getRequestJson().toString()+"&clientid="+user.getClientid()+"&psessionid="+user.getPsessionid());
-		}
-		super.process();
-	}
-	
-	public JSONObject getRequestJson() {
-		return requestJson;
-	}
+    public CommonDataAPI(String apiName) {
+        super(apiName);
+        this.setRequestType(REQ_TYPE.POST);
+    }
 
-	public void setRequestJson(JSONObject requestJson) {
-		this.requestJson = requestJson;
-	}
+    /**
+     * 第一个参数是get上面的 第二个参数是post的json的r部分
+     *
+     * @param requestGet
+     * @param requestJson
+     */
+    abstract public void initParam(QueryParam requestGet, JSONObject requestJson);
 
-	@Override
-	public void callback() {
-		// TODO Auto-generated method stub
-		
-	}
+    public void init(WebQQUser user) {
+        this.user = user;
+        hc = (HttpClient) user.getServerContext().getHttpClient().clone();
+        hc.setRequestProperty("Referer", "http://web2.qq.com/");
+        String param = "{\"vfwebqq\":\"" + user.getVfwebqq() + "\",\"clientid\":\"" + user.getClientid() + "\",\"psessionid\":\"" + user.getPsessionid() + "\",\"key\":0,\"ids\":[]}";
+        setRequestJson(JSONObject.fromObject(param));
+        //requestData=json;
+    }
 
+    @Override
+    public void process() throws Exception {
+        //在提交前设置参数
+        QueryParam requestGet = new QueryParam();
+        this.initParam(requestGet, getRequestJson());
+        this.setRequestGetString(requestGet.toString() + "&clientid=" + user.getClientid() + "&psessionid=" + user.getPsessionid());
+        if (getRequestPostString() == null) {
+            setRequestPostString("r=" + getRequestJson().toString() + "&clientid=" + user.getClientid() + "&psessionid=" + user.getPsessionid());
+        } else {
+            setRequestPostString(getRequestPostString() + "&r=" + getRequestJson().toString() + "&clientid=" + user.getClientid() + "&psessionid=" + user.getPsessionid());
+        }
+        super.process();
+    }
+
+    public JSONObject getRequestJson() {
+        return requestJson;
+    }
+
+    public void setRequestJson(JSONObject requestJson) {
+        this.requestJson = requestJson;
+    }
+
+    @Override
+    public void callback() {
+        // TODO Auto-generated method stub
+    }
 }

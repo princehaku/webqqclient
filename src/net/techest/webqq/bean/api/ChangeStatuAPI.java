@@ -15,7 +15,6 @@
  *  Created on : 2011-9-5, 上午11:49:19
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
@@ -23,33 +22,34 @@ import net.techest.webqq.client.OnlineStatu;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
 
-/**改变在线状态
- * 
+/**
+ * 改变在线状态
+ *
  * 参数onlinestatu
+ *
  * @author haku
  */
-public class ChangeStatuAPI extends CommonJsonAPI{
-	
-	private OnlineStatu onlinestatu=OnlineStatu.ONLINE;
-	
-	public ChangeStatuAPI(){
-		this.setRequestType(REQ_TYPE.GET);
-		this.setRequestURI("http://d.web2.qq.com/channel/change_status2");
-	}
+public class ChangeStatuAPI extends CommonJsonAPI {
 
-	@Override
-	public void initParam(QueryParam requestGetParam,JSONObject json) {
-		requestGetParam.put("newstatus", this.onlinestatu.toString().toLowerCase());
-		System.out.println("父级的"+requestGetParam.toString());
-		System.out.println("我的"+this.requestJson.toString());
-	}
+    private OnlineStatu onlinestatu = OnlineStatu.ONLINE;
 
-	
-	public OnlineStatu getOnlineStatu() {
-		return onlinestatu;
-	}
+    public ChangeStatuAPI() {
+        this.setRequestType(REQ_TYPE.GET);
+        this.setRequestURI("http://d.web2.qq.com/channel/change_status2");
+    }
 
-	public void setOnlineStatu(OnlineStatu statu) {
-		this.onlinestatu = statu;
-	}
+    @Override
+    public void initParam(QueryParam requestGetParam, JSONObject json) {
+        requestGetParam.put("newstatus", this.onlinestatu.toString().toLowerCase());
+        System.out.println("父级的" + requestGetParam.toString());
+        System.out.println("我的" + this.requestJson.toString());
+    }
+
+    public OnlineStatu getOnlineStatu() {
+        return onlinestatu;
+    }
+
+    public void setOnlineStatu(OnlineStatu statu) {
+        this.onlinestatu = statu;
+    }
 }

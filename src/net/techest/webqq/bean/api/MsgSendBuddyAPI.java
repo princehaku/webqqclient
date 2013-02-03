@@ -15,52 +15,51 @@
  *  Created on : 2011-9-5, 上午11:49:19
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean.api;
 
 import net.sf.json.JSONObject;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
 
-/**消息发送API
- * 
- * 参数 long toWhom
- * 参数 txt
+/**
+ * 消息发送API
+ *
+ * 参数 long toWhom 参数 txt
+ *
  * @author haku
  */
-public class MsgSendBuddyAPI extends CommonJsonAPI{
-	
-	private String txt;
-	
-	private String toWhom;
-	
-	public MsgSendBuddyAPI(){
-		this.setRequestType(REQ_TYPE.POST);
-		this.setRequestURI("http://d.web2.qq.com/channel/send_buddy_msg2");
-	}
+public class MsgSendBuddyAPI extends CommonJsonAPI {
 
-	@Override
-	public void initParam(QueryParam requestGetParam,JSONObject json) {
-		JSONObject newj=JSONObject.fromObject("{\"to\":"+this.getToWhom()+",\"face\":564,\"content\":\"[\\\""+this.getTxt()+"\\\"]\",\"msg_id\":123123123}");
-		newj.put("clientid", json.get("clientid"));
-		newj.put("psessionid", json.get("psessionid"));
-		//TODO:bug 无法发送消息
-		setRequestPostString(newj.toString());
-	}
+    private String txt;
+    private String toWhom;
 
-	public String getToWhom() {
-		return toWhom;
-	}
+    public MsgSendBuddyAPI() {
+        this.setRequestType(REQ_TYPE.POST);
+        this.setRequestURI("http://d.web2.qq.com/channel/send_buddy_msg2");
+    }
 
-	public void setToWhom(String toWhom) {
-		this.toWhom = toWhom;
-	}
+    @Override
+    public void initParam(QueryParam requestGetParam, JSONObject json) {
+        JSONObject newj = JSONObject.fromObject("{\"to\":" + this.getToWhom() + ",\"face\":564,\"content\":\"[\\\"" + this.getTxt() + "\\\"]\",\"msg_id\":123123123}");
+        newj.put("clientid", json.get("clientid"));
+        newj.put("psessionid", json.get("psessionid"));
+        //TODO:bug 无法发送消息
+        setRequestPostString(newj.toString());
+    }
 
-	public String getTxt() {
-		return txt;
-	}
+    public String getToWhom() {
+        return toWhom;
+    }
 
-	public void setTxt(String txt) {
-		this.txt = txt;
-	}
+    public void setToWhom(String toWhom) {
+        this.toWhom = toWhom;
+    }
+
+    public String getTxt() {
+        return txt;
+    }
+
+    public void setTxt(String txt) {
+        this.txt = txt;
+    }
 }

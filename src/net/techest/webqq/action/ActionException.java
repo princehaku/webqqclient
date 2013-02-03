@@ -15,12 +15,11 @@
  *  Created on : 2011-9-5, 上午8:06:28
  *  Author     : princehaku
  */
-
 package net.techest.webqq.action;
 
 public class ActionException extends Exception {
 
-	public ActionException(String string) {
-		super(string);
-	}
+    public ActionException(String string) {
+        super(string);
+    }
 }

@@ -15,29 +15,35 @@
  *  Created on : 2011-9-5, 下午5:35:15
  *  Author     : princehaku
  */
-
 package net.techest.webqq.bean.api;
 
 import net.techest.webqq.bean.WebQQUser;
 
-/**所有的webqqapi必须实现的接口
- * 
+/**
+ * 所有的webqqapi必须实现的接口
+ *
  * @author haku
  *
  */
 public interface WebQQAPIInterface {
-	/**初始化
-	 * 
-	 * @param user
-	 */
-	public void init(WebQQUser user) ;
-	/**处理
-	 * 
-	 * @throws Exception
-	 */
-	public void process() throws Exception;
-	/**回调
-	 * 
-	 */
-	public void callback();
+
+    /**
+     * 初始化
+     *
+     * @param user
+     */
+    public void init(WebQQUser user);
+
+    /**
+     * 处理
+     *
+     * @throws Exception
+     */
+    public void process() throws Exception;
+
+    /**
+     * 回调
+     *
+     */
+    public void callback();
 }
