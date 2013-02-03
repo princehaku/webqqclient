@@ -198,12 +198,12 @@ public class SSOLoginAction extends AbstractLoginAction implements Action {
         this.uin = (String) this.scriptEngine.eval(res);
         Log4j.getInstance().debug("VC_RETURN UIN: " + uin);
         String vckey = StringTools.findMc(res, "VC\\('(.*?)'", 1);
-        String vcvalue = StringTools.findMc(res, ",'(.*?)'\\)", 1);
-        Log4j.getInstance().debug("VC_RETURN KEY: " + vckey + "VALUE: " + vcvalue);
-        if (vckey.equals("0")) {
-            this.loginStatu = LoginStatu.NEED_VERIFY;
-        } else {
+        String vcvalue = StringTools.findMc(res, ",'(.*?)',", 1);
+        Log4j.getInstance().debug("VC_RETURN KEY: " + vckey + " VALUE: " + vcvalue);
+        if (vckey.equals("9999")) {
             this.verifyCode = vcvalue;
+        } else {
+            this.loginStatu = LoginStatu.NEED_VERIFY;
         }
     }
 

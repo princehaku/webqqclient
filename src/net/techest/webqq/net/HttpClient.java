@@ -17,9 +17,8 @@
  */
 package net.techest.webqq.net;
 
-import net.techest.util.Log4j;
-
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -29,17 +28,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
+import net.techest.util.Log4j;
+import net.techest.util.StringTools;
 
 /**
  * HTTP连接类 带cookie 可以使用GET和POST 注意: 非线程安全
  *
  * @author princehaku
  */
-public class HttpClient implements Cloneable {
+public class HttpClient{
 
     public enum REQ_TYPE {
 
-        POST, GET, HEAD
+        POST, GET
     };
     private HttpURLConnection httpConn = null;
     private URL turl;
@@ -48,12 +52,24 @@ public class HttpClient implements Cloneable {
     private Map<String, List<String>> responseHeader;
     private String responseMessage;
     Cookies cookies = new Cookies();
-    QueryParam requestParam = new QueryParam();
-    QueryParam postParams = new QueryParam();
+    boolean cookieEnable = true;
+    QuestParams requestParam = new QuestParams();
+    QuestParams postParams = new QuestParams();
+    private int connectTimeOut = 10000;
     private int responseTimerOut = 30000;
+    // 页面编码
+    String charset = "auto";
 
     public URL getUrl() {
         return this.turl;
+    }
+
+    /**
+     * 是否启用cookie特性
+     *
+     */
+    public void enableCookie(boolean cookieEnable) {
+        this.cookieEnable = cookieEnable;
     }
 
     /**
@@ -65,11 +81,34 @@ public class HttpClient implements Cloneable {
     public void setUrl(String url) {
         try {
             turl = new URL(url);
+            Log4j.getInstance().debug("URL SET :" + url);
         } catch (MalformedURLException e) {
+            turl = null;
             Log4j.getInstance().error("错误的URL格式" + e.getMessage());
             return;
         }
-        Log4j.getInstance().debug("URL SET :" + url);
+    }
+
+    /**
+     *
+     * @param url
+     */
+    public HttpClient(String url) {
+        try {
+            turl = new URL(url);
+            Log4j.getInstance().debug("URL SET :" + url);
+        } catch (MalformedURLException e) {
+            Log4j.getInstance().error("错误的URL格式" + e.getMessage());
+        }
+    }
+
+    /**
+     * 得到当前编码
+     *
+     * @return
+     */
+    public String getCharset() {
+        return this.charset;
     }
 
     /**
@@ -96,6 +135,10 @@ public class HttpClient implements Cloneable {
         cookies.put(key, value);
     }
 
+    public void setCookie(Cookies cookies) {
+        this.cookies = cookies;
+    }
+
     public String getCookieString() {
         return cookies.toString();
     }
@@ -120,6 +163,11 @@ public class HttpClient implements Cloneable {
         return postString;
     }
 
+    /**
+     * 设置post串
+     *
+     * @param postString
+     */
     public void setPostString(String postString) {
         this.setRequestType(REQ_TYPE.POST);
         this.postString = postString;
@@ -141,19 +189,43 @@ public class HttpClient implements Cloneable {
     public Cookies getCookies() {
         return cookies;
     }
+    private static final Pattern charsetPattern = Pattern.compile("(?i)\\bcharset=\\s*[\"]?([^\\s;\"]*)");
+
+    /**
+     *
+     * @param charset 页面编码 可以指定auto然后会自动从Content-Type猜测
+     */
+    public void setCharset(String charset) {
+        this.charset = charset;
+    }
+
+    /**
+     * 得到页面返回body的string
+     *
+     * @return
+     * @throws Exception
+     */
+    public String getBodyString() throws Exception {
+        byte[] result = this.exec();
+        String resultString = new String(result, charset);
+        return resultString;
+    }
 
     /**
      *
      * @param url 提交地址
      */
     public byte[] exec() throws Exception {
-
+        if (turl == null) {
+            throw new Exception("错误的URL格式");
+        }
         ByteArrayOutputStream content = new ByteArrayOutputStream();
-        byte[] bufferCache = null;
+
+        byte[] bufferCache;
 
         try {
             httpConn = (HttpURLConnection) turl.openConnection();
-            httpConn.setConnectTimeout(30000);
+            httpConn.setConnectTimeout(this.connectTimeOut);
             httpConn.setReadTimeout(this.responseTimerOut);
             if (getRequestType().equals(REQ_TYPE.GET.toString())) {
                 httpConn.setRequestMethod("GET");
@@ -161,34 +233,31 @@ public class HttpClient implements Cloneable {
             if (getRequestType().equals(REQ_TYPE.POST.toString())) {
                 httpConn.setRequestMethod("POST");
             }
-            if (getRequestType().equals(REQ_TYPE.HEAD.toString())) {
-                httpConn.setRequestMethod("HEAD");
-            }
             httpConn.setRequestProperty("Host", turl.getHost());
             httpConn.setRequestProperty("User-Agent",
-                    "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0.1) Gecko/20100101 Firefox/4.0.1");
+                    "railgun");
             httpConn.setRequestProperty("Accept",
                     "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-            httpConn.setRequestProperty("Accept-Language", "zh-cn,zh;q=0.5");
+            httpConn.setRequestProperty("Accept-Encoding", "gzip");
+            httpConn.setRequestProperty("Accept-Language", "en,zh-cn,zh;q=0.5");
             httpConn.setRequestProperty("Accept-Charset",
-                    "gbk,GB2312;q=0.7,*;q=0.7");
-            if (!(cookies.toString().equals(""))) {
-                // 晕死..
-                httpConn.setRequestProperty("Cookie", cookies.toString());
-                //System.out.print("发送cookie======="+cookies.toString());
+                    "utf8,gbk,GB2312;q=0.7,*;q=0.7");
+            // 发送cookie
+            String cookieString = cookies.toString();
+            if (!(cookieString.equals(""))) {
+                httpConn.setRequestProperty("Cookie", cookieString);
             }
             httpConn.setRequestProperty("Keep-Alive", "off");
             httpConn.setRequestProperty("Cache-Control", "max-age=0");
             // 吧requestParam里面的信息写入
-            Iterator<Entry<String, String>> ir = this.requestParam
-                    .getIterator();
+            Iterator<Entry<String, String>> ir = this.requestParam.getIterator();
             while (ir.hasNext()) {
                 Entry<String, String> obj = ir.next();
                 httpConn.setRequestProperty(obj.getKey(), obj.getValue());
             }
 
+            // 传递POST值
             if (this.requestType.equals(REQ_TYPE.POST)) {
-                //System.out.println("传递POST值");
                 httpConn.setRequestProperty("Content-Type",
                         "application/x-www-form-urlencoded");
                 httpConn.setRequestProperty("Content-Length",
@@ -200,22 +269,16 @@ public class HttpClient implements Cloneable {
                 out.write(getPostString());
                 out.close();
             }
-
-            int contentLength = httpConn.getContentLength();
-            // System.out.println("Content Length:" + contentLength);
-            if (contentLength > 0) {
-                bufferCache = new byte[contentLength];
-            } else {
-                bufferCache = new byte[1024];
+            // 读取响应正文
+            if (httpConn.getResponseCode() != 200) {
+                throw new IOException("响应出错 代码[" + httpConn.getResponseCode() + "]");
             }
-            InputStream uurl;
-            uurl = httpConn.getInputStream();
-            // 放到header去
+            // 放到响应header去
             this.responseHeader = httpConn.getHeaderFields();
-            // 放到mseega
+            // 放到响应message中
             this.responseMessage = httpConn.getHeaderFieldKey(0);
 
-            if (httpConn.getHeaderField("Set-Cookie") != null) {
+            if (this.cookieEnable && httpConn.getHeaderField("Set-Cookie") != null) {
                 List<String> newCookies = httpConn.getHeaderFields().get("Set-Cookie");
                 if (newCookies != null) {
                     Iterator<String> nit = newCookies.iterator();
@@ -225,32 +288,58 @@ public class HttpClient implements Cloneable {
                         String cookiekey = cookiestring.substring(0, cookiestring.indexOf('='));
                         String cookievalue = cookiestring.substring(cookiestring.indexOf('=') + 1, cookiestring.length());
                         cookies.put(cookiekey, cookievalue);
-                        //System.out.println("得到cookie :" + cookiekey);
                     }
                 }
             }
-            //
-            // BufferedReader br = new BufferedReader(new
-            // InputStreamReader(uurl));
-            //
-            // while (line != null) {
-            // line = br.readLine();
-            // if (line != null) {
-            // content.append(line.toString()+"\n");
-            // }
-            // }
 
-            int length = -1;
+            // 读取响应正文
+            int contentLength = httpConn.getContentLength();
+
+            if (contentLength > 0) {
+                bufferCache = new byte[contentLength];
+            } else {
+                bufferCache = new byte[1024];
+            }
+            InputStream uurl = httpConn.getInputStream();
+            // gzip支持
+            if (httpConn.getHeaderField("Content-Encoding") != null && httpConn.getHeaderField("Content-Encoding").equalsIgnoreCase("gzip")) {
+                uurl = new GZIPInputStream(uurl);
+            }
+            int length;
             while ((length = uurl.read(bufferCache)) > 0) {
                 content.write(bufferCache, 0, length);
             }
 
+            // Content-Type: text/html; charset=UTF-8
+            if (charset.equals("auto")) {
+                if (responseHeader.get("Content-Type") != null) {
+                    Matcher m = charsetPattern.matcher(responseHeader.get("Content-Type").get(0).toString());
+                    if (m.find()) {
+                        charset = m.group(1).trim().toUpperCase();
+                        Log4j.getInstance().debug("Get Page Encode From Response");
+                    }
+                }
+            }
+            // 从返回值中猜测编码
+            if (charset.equals("auto")) {
+                String headArea = StringTools.subMinStr(content.toString("utf8"), 0, 2048).toLowerCase();
+                Matcher m = charsetPattern.matcher(headArea);
+                if (m.find()) {
+                    charset = m.group(1).trim().toUpperCase();
+                    Log4j.getInstance().debug("Get Page Encode From Meta");
+                }
+            }
+
+            if (charset.equals("auto")) {
+                charset = "utf8";
+            }
+            Log4j.getInstance().debug("Page Encode : " + charset);
         } catch (Exception e) {
-            e.printStackTrace();
-            httpConn.disconnect();
+            if (httpConn != null) {
+                httpConn.disconnect();
+            }
             throw e;
         }
-
         httpConn.disconnect();
         return content.toByteArray();
     }
@@ -263,17 +352,35 @@ public class HttpClient implements Cloneable {
         return this.responseMessage;
     }
 
+    @Override
     public Object clone() {
         try {
-            // call clone in Object.
-            return super.clone();
+            HttpClient c = (HttpClient) super.clone();
+            c.setCookie((Cookies) this.cookies.clone());
+            c.postParams = (QuestParams) this.postParams.clone();
+            c.requestParam = (QuestParams) this.requestParam.clone();
+            return c;
         } catch (CloneNotSupportedException e) {
             System.out.println("Cloning not allowed.");
             return this;
         }
     }
 
-    public void setResponseTimeOut(int i) {
-        this.responseTimerOut = i;
+    /**
+     * 设置响应超时时间 默认30000毫秒
+     *
+     * @param timemillons
+     */
+    public void setResponseTimeOut(int timemillons) {
+        this.responseTimerOut = timemillons;
+    }
+
+    /**
+     * 设置连接超时时间 默认10000毫秒
+     *
+     * @param timemillons
+     */
+    public void setConnectTimeOut(int timemillons) {
+        this.connectTimeOut = timemillons;
     }
 }
