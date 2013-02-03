@@ -127,7 +127,7 @@ public class SSOLoginAction extends AbstractLoginAction implements Action {
         hc.setUrl(SSOConfig.getInstance().getString("SSO_VERIFY_IMG_URL") + "?uin=" + getUser().getUin() + "&aid=" + SSOConfig.getInstance().getInt("APP_ID") + "&r=" + Math.random());
         byte[] content = hc.exec();
         this.verifyImage = new VerifyImage(content);
-        Log4j.getInstance().debug("VERIFY :  验证图片下载完毕");
+        Log4j.getInstance().info("VERIFY :  验证图片下载完毕");
     }
 
     /**
@@ -245,7 +245,7 @@ public class SSOLoginAction extends AbstractLoginAction implements Action {
         }
 
         this.loginStatu = LoginStatu.INIT_DONE;
-        Log4j.getInstance().debug(this.getUser().toString() + "   初始化完成");
+        Log4j.getInstance().info(this.getUser().toString() + "   初始化完成");
     }
 
     public void callBack() {

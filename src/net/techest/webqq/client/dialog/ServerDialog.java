@@ -56,6 +56,7 @@ public class ServerDialog extends Thread {
      * @param user
      */
     private AbstractLoginAction loginAction;
+	
     private OnlineStatu onlineStatu;
     /**
      * 消息接收链
@@ -85,22 +86,23 @@ public class ServerDialog extends Thread {
             this.userAuth();
             //如果需要验证码 则等待
             if (getLoginAction().getStatu().equals(LoginStatu.NEED_VERIFY)) {
-                Log4j.getInstance().debug("需要验证码");
+                Log4j.getInstance().info("需要验证码");
                 try {
                     this.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            Log4j.getInstance().debug("检测登录状态" + getLoginAction().getStatu());
+            Log4j.getInstance().info("检测登录状态" + getLoginAction().getStatu());
             //如果是登录成功的  阻塞掉进程
             if (getLoginAction().getStatu().equals(LoginStatu.SUCCESS)) {
                 //
-                this.setLiveStatu(OnlineStatu.ONLINE);
+                this.onlineStatu = OnlineStatu.ONLINE;
+                this.notify();
                 this.msgpulltask = new MessagePullThread(this.loginUser);
                 this.msgpulltask.start();
                 try {
-                    //只要不是离线 就一直阻塞这个进程
+                    //只要不是离线 就一直阻塞主进程，this.msgpulltask会持续
                     while (!this.onlineStatu.equals(OnlineStatu.OFFLINE)) {
                         this.wait();
                     }
@@ -108,7 +110,7 @@ public class ServerDialog extends Thread {
                     e.printStackTrace();
                 }
             } else {
-                Log4j.getInstance().debug("登录错误 " + getLoginAction().getStatu());
+                Log4j.getInstance().error("登录错误 " + getLoginAction().getStatu());
             }
 
         } catch (DialogException e) {
@@ -119,8 +121,9 @@ public class ServerDialog extends Thread {
 
     }
 
-    public synchronized void setLiveStatu(OnlineStatu statu) {
-        this.onlineStatu = statu;
+    public synchronized void setOffline() {
+        this.onlineStatu = OnlineStatu.OFFLINE;
+        this.getMessageQueue().notify();
         this.notify();
     }
 
@@ -162,10 +165,14 @@ public class ServerDialog extends Thread {
         try {
             getLoginAction().doit();
         } catch (ActionException e) {
-            Log4j.getInstance().warn("登录时错误");
+            Log4j.getInstance().error("登录时错误");
             e.printStackTrace();
             throw new DialogException("登录时错误" + e.getMessage());
         }
+    }
+
+    public OnlineStatu getOnlineStatu() {
+        return this.onlineStatu;
     }
 
     private static class InstanceHolder {

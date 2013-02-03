@@ -36,6 +36,6 @@ public class PullDataAPI extends CommonJsonAPI {
 
     @Override
     public void initParam(QueryParam requestGetParam, JSONObject requestJson) {
-        this.getHc().setResponseTimeOut(120000);
+        this.getHc().setResponseTimeOut(45000);
     }
 }

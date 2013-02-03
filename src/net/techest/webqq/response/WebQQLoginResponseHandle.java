@@ -42,7 +42,7 @@ public class WebQQLoginResponseHandle implements AbstractResponseHandle {
         AbstractLoginAction loginAction = (AbstractLoginAction) obj;
 
         if (loginAction.getStatu().equals(LoginStatu.NEED_VERIFY)) {
-            Log4j.getInstance().debug("请输入验证码");
+            Log4j.getInstance().info("请输入验证码");
             try {
                 loginAction.getVerifyImage().saveTo("img.jpg");
             } catch (IOException e1) {

@@ -25,6 +25,8 @@ import net.techest.webqq.client.dialog.ServerDialog;
 import net.techest.webqq.response.WebQQLoginResponseHandle;
 
 import java.io.IOException;
+import net.techest.util.Log4j;
+import net.techest.webqq.client.OnlineStatu;
 
 public class TestQQ {
 
@@ -43,9 +45,9 @@ public class TestQQ {
         ((WebQQLoginAction) sd.getLoginAction()).setResponseHandle(new WebQQLoginResponseHandle(sd));
         sd.start();
 
-        while (1 == 1) {
+        while (OnlineStatu.OFFLINE != sd.getOnlineStatu()) {
             JSONObject rjson = sd.getMessageQueue().pull();
-            System.out.println("消息到来" + rjson);
+            Log4j.getInstance().info("消息到来" + rjson);
         }
 
     }

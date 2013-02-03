@@ -41,8 +41,6 @@ public class ChangeStatuAPI extends CommonJsonAPI {
     @Override
     public void initParam(QueryParam requestGetParam, JSONObject json) {
         requestGetParam.put("newstatus", this.onlinestatu.toString().toLowerCase());
-        System.out.println("父级的" + requestGetParam.toString());
-        System.out.println("我的" + this.requestJson.toString());
     }
 
     public OnlineStatu getOnlineStatu() {

@@ -18,11 +18,13 @@
 package net.techest.webqq.action;
 
 import net.sf.json.JSONObject;
+import net.techest.util.Log4j;
 import net.techest.webqq.bean.QQUser;
 import net.techest.webqq.bean.WebQQUser;
 import net.techest.webqq.bean.api.PullDataAPI;
 import net.techest.webqq.bean.api.WebQQAPIInterface;
 import net.techest.webqq.client.OnlineStatu;
+import net.techest.webqq.client.dialog.ServerDialog;
 import net.techest.webqq.sso.Action;
 
 /**
@@ -57,7 +59,7 @@ public class MessagePullThread extends Thread implements Action {
     @Override
     public void run() {
 
-        System.out.println("正在获取消息..");
+        Log4j.getInstance().info("正在获取消息..");
 
         api = (PullDataAPI) loginUser.getServerContext().getWebQQAPI("webqq_pulldata");
 
@@ -67,6 +69,7 @@ public class MessagePullThread extends Thread implements Action {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        this.loginUser.getServerContext().setOffline();
     }
 
     @Override
@@ -77,7 +80,7 @@ public class MessagePullThread extends Thread implements Action {
                 api.process();
                 JSONObject jsonObject = api.getResponseJson();
                 this.failedTimes = 0;
-                System.out.println(jsonObject.toString());
+                Log4j.getInstance().debug(jsonObject.toString());
 //					
 //					if(jsonObject.getLong("retcode")!=0&&jsonObject.getLong("retcode")!=102){
 //						this.setToEnd(true);
@@ -85,19 +88,22 @@ public class MessagePullThread extends Thread implements Action {
                 this.callBack();
             } catch (Exception e1) {
                 //这里有可能是超时了  所以再根据messagecode细分一下进行处理
-                //e1.getMessage().equals("connect timed out")||
-                if (!(e1.getMessage().equals("Read timed out"))) {
-                    e1.printStackTrace();
+                Log4j.getInstance().error(e1.getMessage());
+                if (e1.getMessage().indexOf("timed out") >= 0) {
                     this.failedTimes++;
+                    // read的不算
+                    if (e1.getMessage().indexOf("read") >= 0) {
+                        this.failedTimes = 0;
+                    }
                     if (failedTimes >= 3) {
                         this.setToEnd(true);
                     }
+                } else {
+                    e1.printStackTrace();
+                    this.setToEnd(true);
                 }
             }
         }
-
-        //设置服务窗口
-        this.loginUser.getServerContext().setLiveStatu(OnlineStatu.OFFLINE);
     }
 
     /**

@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sf.json.JSONObject;
 import net.techest.util.Log4j;
+import net.techest.util.StringTools;
 import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
 
@@ -46,14 +47,11 @@ public class MsgSendBuddyAPI extends CommonJsonAPI {
     @Override
     public void initParam(QueryParam requestGetParam, JSONObject json) {
         JSONObject newj;
-        try {
-            newj = JSONObject.fromObject("{\"to\":" + this.getToWhom() + ",\"face\":564,\"content\":\"[\\\"" + URLEncoder.encode(this.getTxt(), "utf-8") + "\\\"]\",\"msg_id\":123123123}");
-            newj.put("clientid", json.get("clientid"));
-            newj.put("psessionid", json.get("psessionid"));
-            this.setRequestJson(newj);
-        } catch (UnsupportedEncodingException ex) {
-            Log4j.getInstance().error("错误的消息内容");
-        }
+        String text = StringTools.addSlashes(StringTools.removeHTMLtags(this.getTxt()));
+        newj = JSONObject.fromObject("{\"to\":" + this.getToWhom() + ",\"face\":564,\"content\":\"[\\\"" + text + "\\\"]\",\"msg_id\":123123123}");
+        newj.put("clientid", json.get("clientid"));
+        newj.put("psessionid", json.get("psessionid"));
+        this.setRequestJson(newj);
     }
 
     public String getToWhom() {
