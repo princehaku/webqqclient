@@ -39,7 +39,7 @@ import net.techest.util.StringTools;
  *
  * @author princehaku
  */
-public class HttpClient{
+public class HttpClient implements Cloneable{
 
     public enum REQ_TYPE {
 

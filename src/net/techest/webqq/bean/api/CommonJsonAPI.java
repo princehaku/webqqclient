@@ -64,7 +64,7 @@ public abstract class CommonJsonAPI extends APIBase implements WebQQAPIInterface
     public void init(WebQQUser user) {
         this.user = user;
         //这里创建的连接器是服务器会话的拷贝  这样才不会受到线程限制
-        hc = (HttpClient) user.getServerContext().getHttpClient().clone();
+        hc = new HttpClient();
         hc.setRequestProperty("Referer", "http://web2.qq.com/");
         String param = "{\"vfwebqq\":\"" + user.getVfwebqq() + "\",\"clientid\":\"" + user.getClientid() + "\",\"psessionid\":\"" + user.getPsessionid() + "\",\"key\":0,\"ids\":[]}";
         setRequestJson(JSONObject.fromObject(param));
@@ -87,7 +87,7 @@ public abstract class CommonJsonAPI extends APIBase implements WebQQAPIInterface
     }
 
     public JSONObject getRequestJson() {
-        return requestJson;
+        return this.requestJson;
     }
 
     public void setRequestJson(JSONObject requestJson) {
