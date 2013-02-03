@@ -57,7 +57,7 @@ public abstract class CommonDataAPI extends APIBase implements WebQQAPIInterface
 
     public void init(WebQQUser user) {
         this.user = user;
-        hc = (HttpClient) user.getServerContext().getHttpClient().clone();
+        hc = new HttpClient();
         hc.setRequestProperty("Referer", "http://web2.qq.com/");
         String param = "{\"vfwebqq\":\"" + user.getVfwebqq() + "\",\"clientid\":\"" + user.getClientid() + "\",\"psessionid\":\"" + user.getPsessionid() + "\",\"key\":0,\"ids\":[]}";
         setRequestJson(JSONObject.fromObject(param));

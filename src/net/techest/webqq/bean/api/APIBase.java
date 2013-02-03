@@ -27,7 +27,7 @@ import net.techest.webqq.net.HttpClient.REQ_TYPE;
  * @author princehaku
  *
  */
-public abstract class APIBase implements Cloneable {
+public abstract class APIBase {
 
     /**
      * 构造函数
@@ -119,7 +119,7 @@ public abstract class APIBase implements Cloneable {
         if (this.getRequestType().equals(REQ_TYPE.POST)) {
             this.hc.setPostString(this.getRequestPostString());
         }
-        Log4j.getInstance().debug("Request : " + toString());
+        Log4j.getInstance().debug(apiName + " Request : " + this.toString());
         content = this.hc.exec();
         responseString = new String(content);
         //Log4j.getInstance().debug("Response : " + responseString);
@@ -199,15 +199,5 @@ public abstract class APIBase implements Cloneable {
      */
     public void setApiName(String apiName) {
         this.apiName = apiName;
-    }
-
-    public Object clone() {
-        try {
-            // call clone in Object.
-            return super.clone();
-        } catch (CloneNotSupportedException e) {
-            System.out.println("Cloning not allowed.");
-            return this;
-        }
     }
 }

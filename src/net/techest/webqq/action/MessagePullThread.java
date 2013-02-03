@@ -19,7 +19,9 @@ package net.techest.webqq.action;
 
 import net.sf.json.JSONObject;
 import net.techest.webqq.bean.QQUser;
+import net.techest.webqq.bean.WebQQUser;
 import net.techest.webqq.bean.api.PullDataAPI;
+import net.techest.webqq.bean.api.WebQQAPIInterface;
 import net.techest.webqq.client.OnlineStatu;
 import net.techest.webqq.sso.Action;
 
@@ -71,6 +73,7 @@ public class MessagePullThread extends Thread implements Action {
     public synchronized void doit() throws ActionException {
         while (!this.canEnd) {
             try {
+                ((WebQQAPIInterface) api).init((WebQQUser) this.loginUser);
                 api.process();
                 JSONObject jsonObject = api.getResponseJson();
                 this.failedTimes = 0;
