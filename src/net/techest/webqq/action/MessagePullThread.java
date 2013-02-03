@@ -42,9 +42,10 @@ public class MessagePullThread extends Thread implements Action {
      */
     PullDataAPI api;
     private boolean canEnd;
+    private int failedTimes = 0;
 
     public void setToEnd(boolean canEnd) {
-        this.canEnd = canEnd;
+        this.canEnd = true;
     }
 
     public MessagePullThread(QQUser user) {
@@ -72,7 +73,7 @@ public class MessagePullThread extends Thread implements Action {
             try {
                 api.process();
                 JSONObject jsonObject = api.getResponseJson();
-
+                this.failedTimes = 0;
                 System.out.println(jsonObject.toString());
 //					
 //					if(jsonObject.getLong("retcode")!=0&&jsonObject.getLong("retcode")!=102){
@@ -84,7 +85,10 @@ public class MessagePullThread extends Thread implements Action {
                 //e1.getMessage().equals("connect timed out")||
                 if (!(e1.getMessage().equals("Read timed out"))) {
                     e1.printStackTrace();
-                    this.setToEnd(true);
+                    this.failedTimes++;
+                    if (failedTimes >= 3) {
+                        this.setToEnd(true);
+                    }
                 }
             }
         }
