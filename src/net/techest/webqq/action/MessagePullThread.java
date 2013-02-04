@@ -79,6 +79,12 @@ public class MessagePullThread extends Thread implements Action {
                 ((WebQQAPIInterface) api).init((WebQQUser) this.loginUser);
                 api.process();
                 JSONObject jsonObject = api.getResponseJson();
+                if (jsonObject.getInt("retcode") == 121) {
+                    Log4j.getInstance().error("Kicked Off");
+                    this.setToEnd(true);
+                    this.callBack();
+                    return;
+                }
                 this.failedTimes = 0;
                 Log4j.getInstance().debug(jsonObject.toString());
                 this.callBack();

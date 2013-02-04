@@ -67,7 +67,11 @@ public class ServerDialog extends Thread {
      */
     private MessageQueue messageQueue;
 
+    private HttpClient hc;
+
     public ServerDialog(QQUser user) {
+        WebQQSystem.newInstance();
+        this.hc = new HttpClient();
         this.messageQueue = new MessageQueue();
         this.loginUser = user;
         this.loginUser.setServerContext(this);
@@ -179,18 +183,13 @@ public class ServerDialog extends Thread {
         return this.onlineStatu;
     }
 
-    private static class InstanceHolder {
-
-        final static HttpClient instance = new HttpClient();
-    }
-
     /**
      * 得到单例的http连接类 整个会话会一直使用它
      *
      * @return
      */
     public HttpClient getHttpClient() {
-        return InstanceHolder.instance;
+        return this.hc;
     }
 
     /**

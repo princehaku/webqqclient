@@ -31,11 +31,15 @@ public class WebQQSystem {
 
     private static class instanceHandle {
 
-        final static WebQQSystem instance = new WebQQSystem();
+        static WebQQSystem instance = new WebQQSystem();
     }
 
     public static WebQQSystem getInstance() {
         return instanceHandle.instance;
+    }
+
+    public static void newInstance() {
+        WebQQSystem.instanceHandle.instance = new WebQQSystem();
     }
 
     public WebQQSystem() {
