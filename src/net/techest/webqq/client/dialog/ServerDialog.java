@@ -17,6 +17,7 @@
  */
 package net.techest.webqq.client.dialog;
 
+import net.sf.json.JSONObject;
 import net.techest.util.Log4j;
 import net.techest.webqq.WebQQSystem;
 import net.techest.webqq.action.ActionException;
@@ -56,7 +57,9 @@ public class ServerDialog extends Thread {
      * @param user
      */
     private AbstractLoginAction loginAction;
-	
+    /**
+     * 在线状态
+     */
     private OnlineStatu onlineStatu;
     /**
      * 消息接收链
@@ -96,18 +99,15 @@ public class ServerDialog extends Thread {
             Log4j.getInstance().info("检测登录状态" + getLoginAction().getStatu());
             //如果是登录成功的  阻塞掉进程
             if (getLoginAction().getStatu().equals(LoginStatu.SUCCESS)) {
-                //
                 this.onlineStatu = OnlineStatu.ONLINE;
-                this.notify();
                 this.msgpulltask = new MessagePullThread(this.loginUser);
                 this.msgpulltask.start();
-                try {
-                    //只要不是离线 就一直阻塞主进程，this.msgpulltask会持续
-                    while (!this.onlineStatu.equals(OnlineStatu.OFFLINE)) {
+                while (this.onlineStatu != onlineStatu.OFFLINE) {
+                    try {
                         this.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             } else {
                 Log4j.getInstance().error("登录错误 " + getLoginAction().getStatu());
@@ -121,9 +121,11 @@ public class ServerDialog extends Thread {
 
     }
 
-    public synchronized void setOffline() {
-        this.onlineStatu = OnlineStatu.OFFLINE;
-        this.getMessageQueue().notify();
+    public synchronized void setOnlineStatu(OnlineStatu statu) {
+        this.onlineStatu = statu;
+        JSONObject jsonObject = JSONObject.fromObject("{status : '',result : {'poll_type' : ''}}");
+        jsonObject.put("status", statu);
+        this.loginUser.getServerContext().getMessageQueue().add(jsonObject);
         this.notify();
     }
 

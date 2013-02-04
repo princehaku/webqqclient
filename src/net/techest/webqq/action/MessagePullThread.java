@@ -69,11 +69,11 @@ public class MessagePullThread extends Thread implements Action {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        this.loginUser.getServerContext().setOffline();
+        this.loginUser.getServerContext().setOnlineStatu(OnlineStatu.OFFLINE);
     }
 
     @Override
-    public synchronized void doit() throws ActionException {
+    public void doit() throws ActionException {
         while (!this.canEnd) {
             try {
                 ((WebQQAPIInterface) api).init((WebQQUser) this.loginUser);
@@ -81,10 +81,6 @@ public class MessagePullThread extends Thread implements Action {
                 JSONObject jsonObject = api.getResponseJson();
                 this.failedTimes = 0;
                 Log4j.getInstance().debug(jsonObject.toString());
-//					
-//					if(jsonObject.getLong("retcode")!=0&&jsonObject.getLong("retcode")!=102){
-//						this.setToEnd(true);
-//					}
                 this.callBack();
             } catch (Exception e1) {
                 //这里有可能是超时了  所以再根据messagecode细分一下进行处理
@@ -92,10 +88,11 @@ public class MessagePullThread extends Thread implements Action {
                 if (e1.getMessage().indexOf("timed out") >= 0) {
                     this.failedTimes++;
                     // read的不算
-                    if (e1.getMessage().indexOf("read") >= 0) {
+                    if (e1.getMessage().toLowerCase().indexOf("read") >= 0) {
                         this.failedTimes = 0;
                     }
                     if (failedTimes >= 3) {
+                        Log4j.getInstance().error(e1.getMessage() + "reached max count");
                         this.setToEnd(true);
                     }
                 } else {
