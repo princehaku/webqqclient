@@ -12,7 +12,7 @@ function encrypt(uin, pass, verify) {
 }
 
 function ptui_checkVC(B, E, C) {
-    return [B,E,C];
+    return C;
 }
 
 function hexchar2bin(str) {

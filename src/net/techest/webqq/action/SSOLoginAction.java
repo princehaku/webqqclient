@@ -39,7 +39,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import sun.org.mozilla.javascript.internal.NativeArray;
 
 /**
  * 通过SSO登录
@@ -193,12 +192,11 @@ public class SSOLoginAction extends AbstractLoginAction implements Action {
         }
         String res = new String(content);
         Log4j.getInstance().debug("VC_RETURN : " + res);
-        String uin = StringTools.findMc(res, "VC\\('.*?','.*?','(.*?)'\\)", 1);
-        NativeArray vccheck = (NativeArray) this.scriptEngine.eval(res);
-        this.uin = (String) vccheck.get(2);
+        String uin = StringTools.findMc(res, "VC\\('(.*?)','(.*?)','(.*?)'\\)", 3);
+        this.uin = (String) this.scriptEngine.eval(res);
         Log4j.getInstance().debug("VC_RETURN UIN: " + uin);
-        String vckey = (String) vccheck.get(0);
-        String vcvalue =(String) vccheck.get(1);
+        String vckey = StringTools.findMc(res, "VC\\('(.*?)','(.*?)','(.*?)'\\)", 1);
+        String vcvalue =StringTools.findMc(res, "VC\\('(.*?)','(.*?)','(.*?)'\\)", 2);
         Log4j.getInstance().debug("VC_RETURN KEY: " + vckey + " VALUE: " + vcvalue);
         if (vckey.equals("0")) {
             this.verifyCode = vcvalue;
