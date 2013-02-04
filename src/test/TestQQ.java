@@ -46,6 +46,7 @@ public class TestQQ {
         sd.start();
 
         while (OnlineStatu.OFFLINE != sd.getOnlineStatu()) {
+            // 这个地方会同步
             JSONObject rjson = sd.getMessageQueue().pull();
             Log4j.getInstance().info("消息到来" + rjson);
         }

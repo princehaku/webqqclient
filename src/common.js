@@ -4,15 +4,15 @@ var chrsz = 8;
 var mode = 32;
 
 function encrypt(uin, pass, verify) {
-            var M = pass;
-            var I = hexchar2bin(md5(M));
-            var H = md5(I + uin);
-            var G = md5(H + verify.toUpperCase());
-            return G;
+    var M = pass;
+    var I = hexchar2bin(md5(M));
+    var H = md5(I + uin);
+    var G = md5(H + verify.toUpperCase());
+    return G;
 }
 
 function ptui_checkVC(B, E, C) {
-    return C;
+    return [B,E,C];
 }
 
 function hexchar2bin(str) {

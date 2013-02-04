@@ -122,9 +122,11 @@ public class ServerDialog extends Thread {
     }
 
     public synchronized void setOnlineStatu(OnlineStatu statu) {
+        // 先修改状态
         this.onlineStatu = statu;
         JSONObject jsonObject = JSONObject.fromObject("{status : '',result : {'poll_type' : ''}}");
         jsonObject.put("status", statu);
+        // 然后推送消息
         this.loginUser.getServerContext().getMessageQueue().add(jsonObject);
         this.notify();
     }

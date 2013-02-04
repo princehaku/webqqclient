@@ -35,12 +35,11 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import sun.org.mozilla.javascript.internal.NativeArray;
 
 /**
  * 通过SSO登录
@@ -195,12 +194,13 @@ public class SSOLoginAction extends AbstractLoginAction implements Action {
         String res = new String(content);
         Log4j.getInstance().debug("VC_RETURN : " + res);
         String uin = StringTools.findMc(res, "VC\\('.*?','.*?','(.*?)'\\)", 1);
-        this.uin = (String) this.scriptEngine.eval(res);
+        NativeArray vccheck = (NativeArray) this.scriptEngine.eval(res);
+        this.uin = (String) vccheck.get(2);
         Log4j.getInstance().debug("VC_RETURN UIN: " + uin);
-        String vckey = StringTools.findMc(res, "VC\\('(.*?)'", 1);
-        String vcvalue = StringTools.findMc(res, ",'(.*?)',", 1);
+        String vckey = (String) vccheck.get(0);
+        String vcvalue =(String) vccheck.get(1);
         Log4j.getInstance().debug("VC_RETURN KEY: " + vckey + " VALUE: " + vcvalue);
-        if (vckey.equals("9999")) {
+        if (vckey.equals("0")) {
             this.verifyCode = vcvalue;
         } else {
             this.loginStatu = LoginStatu.NEED_VERIFY;
