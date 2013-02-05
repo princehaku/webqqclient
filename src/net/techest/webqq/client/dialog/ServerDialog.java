@@ -68,9 +68,11 @@ public class ServerDialog extends Thread {
     private MessageQueue messageQueue;
 
     private HttpClient hc;
+    
+    private WebQQSystem system;
 
     public ServerDialog(QQUser user) {
-        WebQQSystem.newInstance();
+        this.system = new WebQQSystem();
         this.hc = new HttpClient();
         this.messageQueue = new MessageQueue();
         this.loginUser = user;
@@ -200,7 +202,7 @@ public class ServerDialog extends Thread {
      */
     public APIBase getWebQQAPI(String apiName) {
         APIBase api = null;
-        WEBQQAPIFacroty apifac = (WEBQQAPIFacroty) WebQQSystem.getInstance().getContext().getBean("apifactory");
+        WEBQQAPIFacroty apifac = (WEBQQAPIFacroty) this.system.getContext().getBean("apifactory");
         try {
             api = apifac.getApiByName(apiName);
             if (api == null) {

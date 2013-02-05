@@ -91,19 +91,17 @@ public class MessagePullThread extends Thread implements Action {
             } catch (Exception e1) {
                 //这里有可能是超时了  所以再根据messagecode细分一下进行处理
                 Log4j.getInstance().error(e1.getMessage());
+                this.failedTimes++;
+                if (failedTimes >= 3) {
+                    e1.printStackTrace();
+                    Log4j.getInstance().error(e1.getMessage() + "reached max count");
+                    this.setToEnd(true);
+                }
                 if (e1.getMessage().indexOf("timed out") >= 0) {
-                    this.failedTimes++;
-                    // read的不算
+                    // read timed out的不算
                     if (e1.getMessage().toLowerCase().indexOf("read") >= 0) {
                         this.failedTimes = 0;
                     }
-                    if (failedTimes >= 3) {
-                        Log4j.getInstance().error(e1.getMessage() + "reached max count");
-                        this.setToEnd(true);
-                    }
-                } else {
-                    e1.printStackTrace();
-                    this.setToEnd(true);
                 }
             }
         }

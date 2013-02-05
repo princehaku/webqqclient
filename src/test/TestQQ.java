@@ -50,6 +50,5 @@ public class TestQQ {
             JSONObject rjson = sd.getMessageQueue().pull();
             Log4j.getInstance().info("消息到来" + rjson);
         }
-
     }
 }

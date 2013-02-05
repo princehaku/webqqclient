@@ -17,6 +17,7 @@
  */
 package net.techest.util;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,35 +44,31 @@ public class Configure {
     }
 
     /**
-     * 默认构造函数 需要指定文件路径
+     * 默认构造函数 需要指定文件名
      *
-     * @param filePath
+     * @param filename
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public Configure(String filePath) {
+    public Configure(String filename) {
 
         propertie = new Properties();
 
         InputStream inputFile = null;
 
+        inputFile = getClassLoader().getResourceAsStream(filename);
+
+        if (inputFile == null) {
+            Log4j.getInstance().error(this.getClass().getName() + "配置文件" + filename + "读取失败 ");
+            return;
+        }
+
         try {
-            inputFile = getClassLoader().getResourceAsStream(filePath);
-
-            if (inputFile == null) {
-                throw new FileNotFoundException(filePath);
-            }
             propertie.load(inputFile);
-
-            this.filePath = filePath;
-
-        } catch (FileNotFoundException ex) {
-            Log4j.getInstance().error(this.getClass().getName() + "配置文件" + filePath + "不存在 " + ex.getMessage());
+            this.filePath = filename;
+        } catch (IOException ex2) {
+            Log4j.getInstance().error(this.getClass().getName() + "配置文件" + filename + "读取失败 " + ex2.getMessage());
             return;
-        } catch (IOException ex) {
-            Log4j.getInstance().error(this.getClass().getName() + "配置文件" + filePath + "读取失败 " + ex.getMessage());
-            return;
-
         }
     }
 

@@ -29,19 +29,6 @@ public class WebQQSystem {
 
     private ApplicationContext apicontext;
 
-    private static class instanceHandle {
-
-        static WebQQSystem instance = new WebQQSystem();
-    }
-
-    public static WebQQSystem getInstance() {
-        return instanceHandle.instance;
-    }
-
-    public static void newInstance() {
-        WebQQSystem.instanceHandle.instance = new WebQQSystem();
-    }
-
     public WebQQSystem() {
         apicontext = new ClassPathXmlApplicationContext("webqqapi.xml");
     }
