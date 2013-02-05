@@ -1,3 +1,5 @@
+package maintest;
+
 /*  Copyright 2010 princehaku
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +17,7 @@
  *  Created on : 2011-9-4, 下午11:00:27
  *  Author     : princehaku
  */
-package test;
+
 
 import net.sf.json.JSONObject;
 import net.techest.webqq.action.WebQQLoginAction;
