@@ -17,12 +17,15 @@
  */
 package net.techest.util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * 配置文件读取和写入类
@@ -54,9 +57,13 @@ public class Configure {
 
         propertie = new Properties();
 
-        InputStream inputFile = null;
-
-        inputFile = getClassLoader().getResourceAsStream(filename);
+        InputStream inputFile;
+        try {
+            inputFile = new FileInputStream(filename);
+        } catch (FileNotFoundException ex) {
+            inputFile = getClassLoader().getResourceAsStream(filename);
+            Log4j.getInstance().info(this.getClass().getName() + "Load 默认配置 " + filename);
+        }
 
         if (inputFile == null) {
             Log4j.getInstance().error(this.getClass().getName() + "配置文件" + filename + "读取失败 ");

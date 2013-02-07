@@ -24,7 +24,6 @@ import net.techest.webqq.bean.WebQQUser;
 import net.techest.webqq.bean.api.PullDataAPI;
 import net.techest.webqq.bean.api.WebQQAPIInterface;
 import net.techest.webqq.client.OnlineStatu;
-import net.techest.webqq.client.dialog.ServerDialog;
 import net.techest.webqq.sso.Action;
 
 /**
