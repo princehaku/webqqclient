@@ -44,7 +44,9 @@ public class MessagePullThread extends Thread implements Action {
      *
      */
     PullDataAPI api;
+    
     private boolean canEnd;
+    
     private int failedTimes = 0;
 
     public void setToEnd(boolean canEnd) {
@@ -65,10 +67,17 @@ public class MessagePullThread extends Thread implements Action {
         try {
             this.doit();
         } catch (ActionException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        this.loginUser.getServerContext().setOnlineStatu(OnlineStatu.OFFLINE);
+        this.KickOff();
+    }
+
+    public void KickOff() {
+        Log4j.getInstance().error("Kicked Off");
+        this.setToEnd(true);
+        // mock一个kick off的json
+        JSONObject json = JSONObject.fromObject("{'retcode':0, 'result': [{'poll_type': 'kick_message'}]");
+        pushToMessage(json);
     }
 
     @Override
@@ -79,14 +88,12 @@ public class MessagePullThread extends Thread implements Action {
                 api.process();
                 JSONObject jsonObject = api.getResponseJson();
                 if (jsonObject.getInt("retcode") == 121) {
-                    Log4j.getInstance().error("Kicked Off");
-                    this.setToEnd(true);
-                    this.callBack();
+                    this.KickOff();
                     return;
                 }
                 this.failedTimes = 0;
                 Log4j.getInstance().debug(jsonObject.toString());
-                this.callBack();
+                pushToMessage(api.getResponseJson());
             } catch (Exception e1) {
                 //这里有可能是超时了  所以再根据messagecode细分一下进行处理
                 Log4j.getInstance().error(e1.getMessage());
@@ -117,6 +124,6 @@ public class MessagePullThread extends Thread implements Action {
 
     @Override
     public void callBack() {
-        pushToMessage(api.getResponseJson());
+        // do nothing
     }
 }
