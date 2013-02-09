@@ -76,7 +76,7 @@ public class MessagePullThread extends Thread implements Action {
         Log4j.getInstance().error("Kicked Off");
         this.setToEnd(true);
         // mock一个kick off的json
-        JSONObject json = JSONObject.fromObject("{'retcode':0, 'result': [{'poll_type': 'kick_message'}]");
+        JSONObject json = JSONObject.fromObject("{'retcode':0, 'result': [{'poll_type': 'kick_message'}]}");
         pushToMessage(json);
     }
 
