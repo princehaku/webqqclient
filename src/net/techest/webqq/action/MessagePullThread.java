@@ -69,6 +69,9 @@ public class MessagePullThread extends Thread implements Action {
         } catch (ActionException e) {
             e.printStackTrace();
         }
+
+        Log4j.getInstance().info("停止获取消息..");
+        
         this.KickOff();
     }
 
@@ -76,7 +79,7 @@ public class MessagePullThread extends Thread implements Action {
         Log4j.getInstance().error("Kicked Off");
         this.setToEnd(true);
         // mock一个kick off的json
-        JSONObject json = JSONObject.fromObject("{'retcode':0, 'result': [{'poll_type': 'kick_message'}]}");
+        JSONObject json = JSONObject.fromObject("{\"retcode\":0,\"result\":[{\"poll_type\":\"kick_message\"}]}");
         pushToMessage(json);
     }
 
@@ -102,6 +105,7 @@ public class MessagePullThread extends Thread implements Action {
                     e1.printStackTrace();
                     Log4j.getInstance().error(e1.getMessage() + "reached max count");
                     this.setToEnd(true);
+                    break;
                 }
                 if (e1.getMessage().indexOf("timed out") >= 0) {
                     // read timed out的不算

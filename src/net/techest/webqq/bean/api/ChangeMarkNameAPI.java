@@ -22,7 +22,7 @@ import net.techest.webqq.net.HttpClient.REQ_TYPE;
 import net.techest.webqq.net.QueryParam;
 
 /**
- * 获取头像
+ * 修改备注名
  *
  * 参数Uin MarkName
  *

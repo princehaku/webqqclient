@@ -8,6 +8,7 @@
     <bean id="apimsgpull" class="net.techest.webqq.bean.api.PullDataAPI"/>
     <bean id="apigetonlinefriends" class="net.techest.webqq.bean.api.GetOnlineFriendsAPI"/>
     <bean id="apigetgroups" class="net.techest.webqq.bean.api.GetGroupsAPI"/>
+    <bean id="apichangememo" class="net.techest.webqq.bean.api.ChangeMemoAPI"/>
     <bean id="apisendmsgbuddy" class="net.techest.webqq.bean.api.MsgSendBuddyAPI"/>
     <bean id="apichangestatu" class="net.techest.webqq.bean.api.ChangeStatuAPI"/>
     <bean id="apigetfriendinfo" class="net.techest.webqq.bean.api.GetFriendInfoAPI"/>
@@ -35,6 +36,9 @@
                 </entry>
                 <entry key="webqq_send_msg_buddy">
                     <ref local="apisendmsgbuddy"/>
+                </entry>
+                <entry key="webqq_change_memo">
+                    <ref local="apichangememo"/>
                 </entry>
                 <entry key="webqq_change_statu">
                     <ref local="apichangestatu"/>

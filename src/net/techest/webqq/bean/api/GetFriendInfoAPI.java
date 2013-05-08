@@ -40,7 +40,7 @@ public class GetFriendInfoAPI extends CommonJsonAPI {
 
     @Override
     public void initParam(QueryParam requestGetParam, JSONObject requestJson) {
-        requestGetParam.put("tuin", getUin());
+        requestGetParam.put("tuin", this.getUin());
     }
 
     public String getUin() {
